@@ -1,6 +1,6 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
+<!doctype html>
+<html lang="en">
+<head>
 	<meta charset="UTF-8" />
     <title>Phaser - Making your first game, part 9</title>
     <style type="text/css">
@@ -63,15 +63,18 @@ function create() {
     ledge.body.immovable = true;
 
     // The player and its settings
-    // player = game.add.sprite(32, game.world.height - 150, 'dude');
+    // player = game.add.sprite(100, game.world.height - 150, 'dude');
     // player = game.add.asteria(32, game.world.height - 150, 'dude');
-    player = new Asteria(game, 32, game.world.height - 150);
-    game.world.add(player);
+    // player = new Asteria(game, 32, game.world.height - 150);
+    // game.world.add(player);
+    asteria = new Asteria(game, 200, game.world.height - 150);
+    player = asteria.sprite;
+
     //  We need to enable physics on the player
     game.physics.arcade.enable(player);
 
-    player.entersTheScene();
-    player.setMotions();
+    asteria.entersTheScene();
+    asteria.setMotions();
     //  Player physics properties. Give the little guy a slight bounce.
     // player.body.bounce.y = 0.2;
     // player.body.gravity.y = 300;
@@ -105,7 +108,7 @@ function create() {
 
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
-    
+
 }
 
 function update() {
@@ -141,7 +144,7 @@ function update() {
 
         player.frame = 4;
     }
-    
+
     //  Allow the player to jump if they are touching the ground.
     if (cursors.up.isDown && player.body.touching.down)
     {
@@ -151,7 +154,7 @@ function update() {
 }
 
 function collectStar (player, star) {
-    
+
     // Removes the star from the screen
     star.kill();
 
