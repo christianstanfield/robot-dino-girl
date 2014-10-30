@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 
 function preload() {
 
@@ -34,11 +34,22 @@ var scoreText;
 
 function create() {
 
+  // World driver code
+  var world = new World
+  world.setCanvas(0, 0, 2400, 600);
+
+  game.input.onDown.add(world.setFullscreen, this);
+  // window.onload.game.add(world.setFullscreen, this);
+
+
+    
+
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
     //  A simple background for our game
-    game.add.sprite(0, 0, 'sky');
+    var sky = game.add.sprite(0, 0, 'sky');
+    sky.scale.setTo(10,1);
 
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = game.add.group();
@@ -50,7 +61,7 @@ function create() {
     var ground = platforms.create(0, game.world.height - 64, 'ground');
 
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-    ground.scale.setTo(2, 2);
+    ground.scale.setTo(10, 2);
 
     //  This stops it from falling away when you jump on it
     ground.body.immovable = true;
@@ -69,6 +80,12 @@ function create() {
     // game.world.add(player);
     asteria = new Asteria(game, 32, game.world.height - 150);
     player = asteria.sprite;
+
+    // set camera follow
+    // game.camera.follow(player);
+    // game.camera.follow(player, 2);
+    world.setCamera(player);
+    // style = 'STYLE_PLATFORMER';
 
     //  We need to enable physics on the player
     game.physics.arcade.enable(player);
@@ -91,20 +108,16 @@ function create() {
     stars.enableBody = true;
 
     //  Here we'll create 12 of them evenly spaced apart
-    for (var i = 0; i < 12; i++)
-    {
-        //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 70, 0, 'star');
+   
 
-        //  Let gravity do its thing
-        star.body.gravity.y = 300;
+    // rainStars(game.camera.x);
 
-        //  This just gives each star a slightly random bounce value
-        star.body.bounce.y = 0.7 + Math.random() * 0.2;
-    }
+    
 
     //  The score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    
+
 
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
@@ -112,6 +125,11 @@ function create() {
 }
 
 function update() {
+
+  
+    if (player.position.x === 600) {
+      rainStar();
+    };
 
     //  Collide the player and the stars with the platforms
     game.physics.arcade.collide(player, platforms);
@@ -151,6 +169,13 @@ function collectStar (player, star) {
     //  Add and update the score
     score += 10;
     scoreText.text = 'Score: ' + score;
+
+}
+
+function render() {
+
+    game.debug.cameraInfo(game.camera, 32, 32);
+    game.debug.spriteCoords(player, 32, 500);
 
 }
 
