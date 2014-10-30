@@ -13,18 +13,15 @@ Asteria.prototype.setMotions = function() {
   this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
 }
 
-Asteria.prototype.setVelocityX = function(xVelocity) {
-  this.sprite.body.velocity.x = xVelocity;
-  // this.sprite.body.velocity.y = 0;
-}
-
 Asteria.prototype.moveLeft = function() {
-  this.sprite.body.velocity.x = -150;
+  // this.sprite.body.velocity.x = -150;
+  this.setVelocityX(-150);
   this.sprite.animations.play('left');
 }
 
 Asteria.prototype.moveRight = function() {
-  this.sprite.body.velocity.x = 150;
+  // this.sprite.body.velocity.x = 150;
+  this.setVelocityX(150);
   this.sprite.animations.play('right');
 }
 
@@ -34,5 +31,23 @@ Asteria.prototype.standStill = function() {
 }
 
 Asteria.prototype.jump = function() {
-  this.sprite.body.velocity.y = -350;
+  // this.sprite.body.velocity.y = -350;
+  this.setVelocityY(-350);
 }
+
+// Helper methods
+Asteria.prototype.setVelocityX = function(velocityX) {
+  this.sprite.body.velocity.x = velocityX;
+};
+
+Asteria.prototype.getVelocityX = function() {
+  return this.sprite.body.velocity.x;
+};
+
+Asteria.prototype.setVelocityY = function(velocityY) {
+  this.sprite.body.velocity.y = velocityY;
+};
+
+Asteria.prototype.getVelocityY = function() {
+  return this.sprite.body.velocity.y;
+};
