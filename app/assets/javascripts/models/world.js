@@ -11,7 +11,7 @@ var World = function() {
       width: width,
       height: height
     };
-    this.canvas = canvas;
+    game.world.setBounds(canvas);
   }
   this.setFullscreen = function(){};
 

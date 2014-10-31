@@ -3,8 +3,23 @@ var Asteria = function(new_game, positionX, positionY){
   var positionX = positionX;
   var positionY = positionY;
   var velocity = {'x': 0, 'y':0};
+  this.sprite = game.add.sprite(0, 0, 'dude');
 
-  var asteria_sprite = game.add['sprite'];
+  var asteria_sprite = game.add(sprite);
+
+  this.entersTheScene = function(){
+
+  }
+
+  this.setMotions = function(){
+
+  }
+
+  this.setVelocityX = function(number){
+    velocity['x'] = number;
+  }
+
+
 
   this.moveLeft = function(){
     velocity['x']--;
@@ -17,7 +32,7 @@ var Asteria = function(new_game, positionX, positionY){
   }
 
   this.standStill = function(){
-    asteria_sprite().animations['stop']();
+    sprite.animations['stop']();
   }
 
   this.jump = function(){
