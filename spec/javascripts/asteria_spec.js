@@ -1,5 +1,5 @@
 describe("Asteria", function() {
-  var sprite, game, asteria;
+  var sprite, fakeGame, asteria;
 
   beforeEach(function(){
     // create a fake Sprite
@@ -9,27 +9,28 @@ describe("Asteria", function() {
         velocity: {x: 0, y:0},
         gravity: {x:0, y:0},
         collideWorldBounds: true,
-        setSize: {width: 0, height: 0, offsetX: 0, offsetY: 0}
       }
       this.animations = {
         add: function(a,b,c,d) {return true;},
         play: function(a) {return true;},
         stop: function() {return true;}
       }
+      this.crop = function() {return true;}
       this.frame = 0
       this.height = 0
     }
     sprite = new Sprite();
     spyOn(sprite.animations, 'stop');
     spyOn(sprite.animations, 'play');
+    spyOn(sprite, 'crop');
     // create a fake Game
-    function Game() {
+    function FakeGame() {
       this.add = {
         sprite: function(a,b,c) {return sprite;}
       }
     };
-    game = new Game();
-    asteria = new Asteria(game, 0, 0);
+    fakeGame = new FakeGame();
+    asteria = new Asteria(fakeGame, 0, 0);
   });
 
   it("can move left", function(){
@@ -66,18 +67,6 @@ describe("Asteria", function() {
     expect(asteria.getVelocityX()).toBeGreaterThan(0);
     expect(sprite.animations.play).toHaveBeenCalledWith('right');
     expect(sprite.animations.stop).toHaveBeenCalled();
-  });
-
-  it("can crouch", function(){
-    asteria.crouch();
-    expect(asteria.reSize()).toHaveBeenCalled();
-    expect(sprite.animations.stop).toHaveBeenCalled();
-  });
-
-  it("can stand from crouching", function(){
-    asteria.stand();
-    expect(asteria.reSize()).toHaveBeenCalled();
-    expect(sprite.crop).toHaveBeenCalled();
   });
 
   it("can hop", function(){

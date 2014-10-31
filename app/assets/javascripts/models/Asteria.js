@@ -82,7 +82,7 @@ Asteria.prototype.getVelocityY = function() {
 };
 
 Asteria.prototype.reSize = function(sizeX, sizeY) {
-  return this.sprite.body.setSize(sizeX, sizeY, 0, 0)
+  this.sprite.body.setSize(sizeX, sizeY, 0, 0)
 }
 
 Asteria.prototype.fire = function(){
