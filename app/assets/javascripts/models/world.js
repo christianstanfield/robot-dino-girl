@@ -45,3 +45,9 @@ function rainStar () {
   star.body.gravity.y = 300;
   star.body.bounce.y = 0.7 + Math.random() * 0.2;
 }
+
+
+
+// if (player.position.x === 600) {
+//   rainStar();
+// };
