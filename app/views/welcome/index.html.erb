@@ -18,11 +18,13 @@
         game.load.image('ground', 'assets/platform.png');
         game.load.image('star', 'assets/star.png');
         game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+        game.load.image('ladder', 'assets/ladder.png')
 
     }
 
     var player;
     var platforms;
+    var ladders;
     var cursors;
     var spacebar;
     var shootWeapon; 
@@ -82,6 +84,14 @@
         // player.animations.add('left', [0, 1, 2, 3], 10, true);
         // player.animations.add('right', [5, 6, 7, 8], 10, true);
 
+
+        // Create a ladder to climb
+        ladders = game.add.group();
+        ladders.enableBody = true;
+
+        var ladder1 = ladders.create(600, 400, 'ladder')
+        ladder1.body.immovable = true;
+
         //  Finally some stars to collect
         stars = game.add.group();
 
@@ -101,6 +111,8 @@
             star.body.bounce.y = 0.7 + Math.random() * 0.2;
         }
 
+
+
         //  The score
         scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
@@ -116,6 +128,7 @@
         //  Collide the player and the stars with the platforms
         game.physics.arcade.collide(player, platforms);
         game.physics.arcade.collide(stars, platforms);
+        
 
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
         game.physics.arcade.overlap(player, stars, collectStar, null, this);
@@ -137,7 +150,9 @@
             asteria.jump();
         }
 
-    
+        if (cursors.up.isDown){
+             game.physics.arcade.overlap(asteria, ladders, asteria.climb, null, this);
+        }
 }
 
 

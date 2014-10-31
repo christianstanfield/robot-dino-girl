@@ -37,6 +37,22 @@ Asteria.prototype.jump = function(){
   this.sprite.body.velocity.y = -300;
 };
 
+
+Asteria.prototype.climb = function(){
+  this.sprite.body.gravity.y = 0;
+  this.sprite.body.moveUp(200); 
+};
+
+
+
+
+
+
+
+
+
+
+
 Asteria.prototype.fire = function(){
 
 };
