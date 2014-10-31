@@ -4,25 +4,24 @@ function GameController() {
   var cursors;
   var spacebar;
   var shootWeapon;
-  var stars;
+  var redOrbs;
   var score = 0;
   var scoreText;
   var world;
   var game;
-  var cloudMapper; 
+  var healthbar;
 }
 
 GameController.prototype.run = function() {
   game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: this.preload, create: this.create, update: this.update, render: this.render });
-  cloudMapper = new Tilemapper(game, 'assets/csv_map.csv', 'assets/cloud_tilemap.png')
 }
 
 GameController.prototype.preload = function() {
   game.load.image('sky', 'assets/sky.png');
   game.load.image('ground', 'assets/platform.png');
-  game.load.image('star', 'assets/star.png');
+  game.load.image('redOrb', 'assets/unsafe_orb.png');
+  game.load.image('diamond', 'assets/diamond.png')
   game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-  cloudMapper.loadAssets = ('cloudsheet', 'cloudMap' )
 }
 
 GameController.prototype.create = function() {
@@ -35,8 +34,6 @@ GameController.prototype.create = function() {
   // window.onload.game.add(world.setFullscreen, this);
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
-
-  cloudMapper.createTiles('cloudMap', 'cloudImage', 'cloudSheet', [[0, 18]])
 
   var sky = game.add.sprite(0, 0, 'sky');
   sky.scale.setTo(10,1);
@@ -59,6 +56,16 @@ GameController.prototype.create = function() {
   asteria = new Asteria(game, 32, game.world.height - 150);
   player = asteria.sprite;
 
+  // Initializing asteria's healthbar //
+ 
+  player.maxHealth = 5
+  player.health = 5
+
+  healthbar = game.add.group();
+  for (var i = 0; i < 5; i++) {
+    var diamond = healthbar.create(i * 20, 0, 'diamond');
+  }
+
   //  We need to enable physics on the player
   game.physics.arcade.enable(player);
   asteria.entersTheScene();
@@ -79,30 +86,47 @@ GameController.prototype.create = function() {
     }
   }
 
-  // Falling stars
-  stars = game.add.group();
-  stars.enableBody = true;
-  game.time.events.loop(Phaser.Timer.SECOND * 3, rainStars, game);
+  // Falling redOrbs
+  redOrbs = game.add.group();
+  redOrbs.enableBody = true;
+  game.time.events.loop(Phaser.Timer.SECOND * 5, rainRedOrbs, game);
 }
 
 GameController.prototype.update = function() {
 
-  //  Collide the player and the stars with the platforms
+  //  Collide the player and the redOrbs with the platforms
   game.physics.arcade.collide(player, platforms);
-  game.physics.arcade.collide(stars, platforms);
-
-  cloudMapper.updateTiles([player, stars])
+  game.physics.arcade.collide(redOrbs, platforms);
 
   asteria.setVelocityX(0);
 
-  game.physics.arcade.overlap(player, stars, collectStar, null, game);
 
-  collectStar = function(player, star) {
-    star.kill();
+
+collectRedOrb = function(player, redOrb) {
+    redOrb.kill();
     //  Add and update the score
     // score += 10;
     // scoreText.text = 'Score: ' + score;
   }
+
+
+
+  // Health Conditions //
+
+  loseHealth = function() {
+    if (player.health === 0){
+      player.kill();
+    }
+    player.health -= 1
+    console.log(player.health)
+    healthbar.children.pop();
+  }
+
+  game.physics.arcade.overlap(player, redOrbs, loseHealth, null, game);
+  game.physics.arcade.overlap(player, redOrbs, collectRedOrb, null, game);
+
+
+  // Movement Conditions //
 
   if (cursors.left.isDown) {
     asteria.moveLeft();
@@ -117,7 +141,11 @@ GameController.prototype.update = function() {
     asteria.jump();
   }
 
-  //  Autojump for star game
+  // if (spacebar.isDown && player.body.blocked.down) {
+  //   asteria.jump();
+  // }
+
+  //  Autojump for orb game
   // if(player.body.touching.down){
     // asteria.jump();
   // }
