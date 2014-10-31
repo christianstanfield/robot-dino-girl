@@ -50,10 +50,10 @@ Asteria.prototype.getVelocityY = function() {
 };
 
 
-Asteria.prototype.climb = function(){
-  this.sprite.body.gravity.y = 0;
-  this.sprite.body.moveUp(200); 
-};
+// Asteria.prototype.climb = function(){
+//   this.sprite.body.gravity.y = 0;
+//   // this.sprite.body.moveUp(200); 
+// };
 
 
 

@@ -36,22 +36,22 @@
     function create() {
 
 
-  // World driver code
-  var world = new World
-  world.setCanvas(0, 0, 2400, 600);
+      // World driver code
+      var world = new World
+      world.setCanvas(0, 0, 2400, 600);
 
-  game.input.onDown.add(world.setFullscreen, this);
-  // window.onload.game.add(world.setFullscreen, this);
+      game.input.onDown.add(world.setFullscreen, this);
+      // window.onload.game.add(world.setFullscreen, this);
 
 
     
 
     //  We're going to be using physics, so enable the Arcade Physics system
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+        game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    //  A simple background for our game
-    var sky = game.add.sprite(0, 0, 'sky');
-    sky.scale.setTo(10,1);
+        //  A simple background for our game
+        var sky = game.add.sprite(0, 0, 'sky');
+        sky.scale.setTo(10,1);
 
         //  We're going to be using physics, so enable the Arcade Physics system
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -71,7 +71,7 @@
 
         //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
       
-    ground.scale.setTo(10, 2);
+        ground.scale.setTo(10, 2);
 
         //  This stops it from falling away when you jump on it
         ground.body.immovable = true;
@@ -161,7 +161,6 @@
         //  Our controls.
         cursors = game.input.keyboard.createCursorKeys();
         spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        game.startFullScreen();
     }
 
 
@@ -205,11 +204,15 @@
         }
 
         if (cursors.up.isDown){
-             game.physics.arcade.overlap(asteria, ladders, asteria.climb, null, this);
+            game.physics.arcade.overlap(player, ladders, climb, null, this);
         }
 }
 
+    function climb (player, ladders) {
+        player.body.gravity.y = 0;
+        player.body.moveUp(200)
 
+    }
 
 
     function collectStar (player, star) {
