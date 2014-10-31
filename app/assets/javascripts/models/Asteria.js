@@ -5,7 +5,7 @@ var Asteria = function(game, x, y){
 Asteria.prototype.entersTheScene = function(){
   this.sprite.body.bounce.y = 0.2;
   this.sprite.body.gravity.y = 300;
-  this.sprite.body.collideWorldBounds = true;
+  this.sprite.body.collideWorldBounds = false;
 };
 
 Asteria.prototype.setMotions = function(){
@@ -21,7 +21,7 @@ Asteria.prototype.moveLeft = function() {
 };
 
 Asteria.prototype.moveRight = function() {
-  this.setVelocityX(150);
+  this.setVelocityX(250);
   this.sprite.animations.play('right');
 };
 
