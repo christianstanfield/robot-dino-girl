@@ -26,7 +26,7 @@
     var platforms;
     var cursors;
     var spacebar;
-    var shootWeapon; 
+    var shootWeapon;
     var stars;
     var score = 0;
     var scoreText;
@@ -42,7 +42,7 @@
   // window.onload.game.add(world.setFullscreen, this);
 
 
-    
+
 
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -68,7 +68,7 @@
         var ground = platforms.create(0, game.world.height - 64, 'ground');
 
         //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-      
+
     ground.scale.setTo(10, 2);
 
         //  This stops it from falling away when you jump on it
@@ -101,7 +101,13 @@
     // style = 'STYLE_PLATFORMER';
 
     //  We need to enable physics on the player
+>>>>>>> master
     game.physics.arcade.enable(player);
+    player.animations.add('left', [0, 1, 2, 3], 10, true);
+    player.animations.add('right', [5, 6, 7, 8], 10, true);
+    player.body.bounce.y = 0.2;
+    player.body.gravity.y = 300;
+    player.body.linearDamping = 1;
 
         asteria.entersTheScene();
         asteria.setMotions();
@@ -129,13 +135,13 @@
 
 
     //  Here we'll create 12 of them evenly spaced apart
-   
+
 
     // rainStars(game.camera.x);
 
-    
 
-   
+
+
             //  Let gravity do its thing
             star.body.gravity.y = 300;
 
@@ -164,15 +170,10 @@
         game.physics.arcade.overlap(player, stars, collectStar, null, this);
 
 
-  
+
     if (player.position.x === 600) {
       rainStar();
     };
-
-    //  Collide the player and the stars with the platforms
-    game.physics.arcade.collide(player, platforms);
-    game.physics.arcade.collide(stars, platforms);
-
         asteria.setVelocityX(0);
 
 
@@ -191,7 +192,7 @@
             asteria.jump();
         }
 
-    
+
 }
 
 
@@ -221,3 +222,4 @@ function render() {
 
     </body>
 </html>
+
