@@ -36,16 +36,12 @@ GameController.prototype.create = function() {
   var sky = game.add.sprite(0, 0, 'sky');
   sky.scale.setTo(10,1);
 
-  //  The platforms group contains the ground and the 2 ledges we can jump on
   platforms = game.add.group();
-
   //  We will enable physics for any object that is created in this group
   platforms.enableBody = true;
 
   var ground = platforms.create(0, game.world.height - 64, 'ground');
-
   ground.scale.setTo(10, 2);
-
   //  This stops it from falling away when you jump on it
   ground.body.immovable = true;
 
@@ -57,16 +53,13 @@ GameController.prototype.create = function() {
 
   asteria = new Asteria(game, 32, game.world.height - 150);
   player = asteria.sprite;
-  asteria.entersTheScene();
-  asteria.setMotions();
 
   //  We need to enable physics on the player
   game.physics.arcade.enable(player);
+  asteria.entersTheScene();
+  asteria.setMotions();
 
   world.setCamera(game, player);
-
-  stars = game.add.group();
-  stars.enableBody = true;
 
   //  The score
   scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
@@ -80,6 +73,11 @@ GameController.prototype.create = function() {
         asteria.hop();
     }
   }
+
+  // Falling stars
+  stars = game.add.group();
+  stars.enableBody = true;
+  game.time.events.loop(Phaser.Timer.SECOND * 3, rainStars, game);
 }
 
 GameController.prototype.update = function() {
@@ -89,7 +87,9 @@ GameController.prototype.update = function() {
   game.physics.arcade.collide(stars, platforms);
 
   asteria.setVelocityX(0);
-  
+
+  game.physics.arcade.overlap(player, stars, collectStar, null, game);
+
   collectStar = function(player, star) {
     star.kill();
     //  Add and update the score
@@ -97,39 +97,36 @@ GameController.prototype.update = function() {
     // scoreText.text = 'Score: ' + score;
   }
 
-  //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-  game.physics.arcade.overlap(player, stars, collectStar, null, game);
-
-  if(cursors.left.isDown){
-      asteria.moveLeft();
-  }
-  else if(cursors.right.isDown){
-      asteria.moveRight();
-  }
-  else {
-      asteria.standStill();
+  if (cursors.left.isDown) {
+    asteria.moveLeft();
+  } else if (cursors.right.isDown) {
+    asteria.moveRight();
+  } else {
+    asteria.standStill();
   }
 
   //  Allow the player to jump if they are touching the ground.
-  if(spacebar.isDown && player.body.touching.down){
-      asteria.jump();
+  if (spacebar.isDown && player.body.touching.down) {
+    asteria.jump();
   }
 
-  if(cursors.down.isDown && player.body.touching.down && cursors.left.isDown){
+  //  Autojump for star game
+  // if(player.body.touching.down){
+    // asteria.jump();
+  // }
+
+  if (cursors.down.isDown && player.body.touching.down && cursors.left.isDown) {
       asteria.crawlLeft();
-  }
-  else if(cursors.down.isDown && player.body.touching.down && cursors.right.isDown){
+  } else if (cursors.down.isDown && player.body.touching.down && cursors.right.isDown) {
       asteria.crawlRight();
-  }
-  else if(cursors.down.isDown && player.body.touching.down){
+  } else if (cursors.down.isDown && player.body.touching.down) {
       asteria.crouch();
   }
-
 
 }
 
 GameController.prototype.render = function() {
 
-  game.debug.cameraInfo(game.camera, 32, 32);
-  game.debug.spriteCoords(player, 32, 500);
+  // game.debug.cameraInfo(game.camera, 32, 32);
+  // game.debug.spriteCoords(player, 32, 500);
 }
