@@ -11,7 +11,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141030002711) do
+ActiveRecord::Schema.define(version: 20141030192212) do
+
+  create_table "game_reports", force: true do |t|
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "level_reports", force: true do |t|
+    t.integer  "points",           default: 0
+    t.integer  "completion_time",  default: 0
+    t.integer  "enemies_killed",   default: 0
+    t.integer  "orbs_collected",   default: 0
+    t.integer  "relics_collected", default: 0
+    t.integer  "game_report_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", force: true do |t|
+    t.string   "username"
+    t.string   "password_digest"
+    t.string   "email"
+    t.integer  "key_left"
+    t.integer  "key_right"
+    t.integer  "key_up"
+    t.integer  "key_down"
+    t.integer  "key_jump"
+    t.integer  "key_shoot"
+    t.integer  "key_switch"
+    t.integer  "key_pause"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "welcomes", force: true do |t|
     t.datetime "created_at"
