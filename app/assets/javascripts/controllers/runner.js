@@ -1,4 +1,6 @@
-// $( document ).ready(function() {
-//   var gameController = new GameController();
-//   gameController.run();
-// });
+$( document ).ready(function() {
+  $('#start-game-link').on('click', function(){
+    var gameController = new GameController();
+    gameController.run()
+  });
+});

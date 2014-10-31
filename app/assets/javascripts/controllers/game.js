@@ -12,7 +12,7 @@ function GameController() {
 }
 
 GameController.prototype.run = function() {
-  game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: this.preload, create: this.create, update: this.update, render: this.render });
+  game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv', { preload: this.preload, create: this.create, update: this.update, render: this.render });
 }
 
 GameController.prototype.preload = function() {
