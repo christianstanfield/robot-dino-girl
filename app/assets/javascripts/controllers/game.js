@@ -77,6 +77,8 @@ GameController.prototype.create = function() {
         player = asteria.sprite;
 
         stars = game.add.group();
+        console.log(player);
+        console.log(asteria.sprite);
         //  We need to enable physics on the player
         game.physics.arcade.enable(player);
 
