@@ -2,15 +2,15 @@ function World () {
   
 };
 
-World.prototype.setCanvas = function(x, y, width, height) {
+World.prototype.setCanvas = function(game, x, y, width, height) {
   game.world.setBounds(x, y, width, height);
 };
 
-World.prototype.setCamera = function(player) {
+World.prototype.setCamera = function(game, player) {
   game.camera.follow(player, 2);
 };
 
-World.prototype.setFullscreen = function() {
+World.prototype.setFullscreen = function(game) {
   game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 
   // Keep original size
