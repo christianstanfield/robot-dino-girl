@@ -27,9 +27,9 @@ World.prototype.setFullscreen = function(game) {
 };
 
 
-function rainStars (cameraPosition) {
+function rainStars () {
   for (var i = 0; i < Math.floor(Math.random()*10+5); i++) {
-    var star = stars.create(game.world.randomX, 0, 'star');
+    var star = stars.create(game.world.randomX, 0, 'blueOrb');
     star.body.gravity.y = 100;
     star.body.bounce.y = 0.7 + Math.random() * 0.2;
   }
