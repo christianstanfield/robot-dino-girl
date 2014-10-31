@@ -1,4 +1,4 @@
-$( document ).ready(function() {
-  var gameController = new GameController();
-  gameController.run();
-});
+// $( document ).ready(function() {
+//   var gameController = new GameController();
+//   gameController.run();
+// });
