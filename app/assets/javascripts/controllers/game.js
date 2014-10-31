@@ -3,7 +3,7 @@ function GameController() {
   var platforms;
   var cursors;
   var spacebar;
-  var shootWeapon; 
+  var shootWeapon;
   var stars;
   var score = 0;
   var scoreText;
@@ -54,7 +54,7 @@ GameController.prototype.create = function() {
         var ground = platforms.create(0, game.world.height - 64, 'ground');
 
         //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-      
+
     ground.scale.setTo(10, 2);
 
         //  This stops it from falling away when you jump on it
@@ -115,13 +115,13 @@ GameController.prototype.create = function() {
 
 
     //  Here we'll create 12 of them evenly spaced apart
-   
+
 
     // rainStars(game.camera.x);
 
-    
 
-   
+
+
             //  Let gravity do its thing
             star.body.gravity.y = 300;
 
@@ -136,6 +136,14 @@ GameController.prototype.create = function() {
         cursors = game.input.keyboard.createCursorKeys();
         // console.log(cursors)
         spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+        game.input.keyboard.onUpCallback = function(event) {
+            if ((event.keyCode == Phaser.Keyboard.DOWN) && player.body.touching.down) {
+                asteria.stand();
+                asteria.hop();
+            }
+        };
+
         game.startFullScreen();
         // this.stars = stars;
     }
@@ -161,7 +169,7 @@ GameController.prototype.update = function() {
         game.physics.arcade.overlap(player, stars, collectStar, null, game);
 
 
-  
+
     if (player.position.x === 600) {
       rainStar();
     };
@@ -171,6 +179,7 @@ GameController.prototype.update = function() {
     // game.physics.arcade.collide(stars, platforms);
 
         asteria.setVelocityX(0);
+
 
         // console.log(cursors);
         if(cursors.left.isDown){
@@ -184,11 +193,21 @@ GameController.prototype.update = function() {
         }
 
         //  Allow the player to jump if they are touching the ground.
-        if (spacebar.isDown && player.body.touching.down){
+        if(spacebar.isDown && player.body.touching.down){
             asteria.jump();
         }
 
-    
+        if(cursors.down.isDown && player.body.touching.down && cursors.left.isDown){
+            asteria.crawlLeft();
+        }
+        else if(cursors.down.isDown && player.body.touching.down && cursors.right.isDown){
+            asteria.crawlRight();
+        }
+        else if(cursors.down.isDown && player.body.touching.down){
+            asteria.crouch();
+        }
+
+
 }
 
 GameController.prototype.render = function() {
