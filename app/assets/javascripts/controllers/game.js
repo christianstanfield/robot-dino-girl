@@ -9,10 +9,12 @@ function GameController() {
   var scoreText;
   var world;
   var game;
+  var cloudMapper; 
 }
 
 GameController.prototype.run = function() {
   game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: this.preload, create: this.create, update: this.update, render: this.render });
+  cloudMapper = new Tilemapper(game, 'assets/csv_map.csv', 'assets/cloud_tilemap.png')
 }
 
 GameController.prototype.preload = function() {
@@ -20,6 +22,7 @@ GameController.prototype.preload = function() {
   game.load.image('ground', 'assets/platform.png');
   game.load.image('star', 'assets/star.png');
   game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+  cloudMapper.loadAssets = ('cloudsheet', 'cloudMap' )
 }
 
 GameController.prototype.create = function() {
@@ -32,6 +35,8 @@ GameController.prototype.create = function() {
   // window.onload.game.add(world.setFullscreen, this);
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
+
+  cloudMapper.createTiles('cloudMap', 'cloudImage', 'cloudSheet', [[0, 18]])
 
   var sky = game.add.sprite(0, 0, 'sky');
   sky.scale.setTo(10,1);
@@ -85,6 +90,8 @@ GameController.prototype.update = function() {
   //  Collide the player and the stars with the platforms
   game.physics.arcade.collide(player, platforms);
   game.physics.arcade.collide(stars, platforms);
+
+  cloudMapper.updateTiles([player, stars])
 
   asteria.setVelocityX(0);
 
