@@ -23,7 +23,7 @@ describe("Asteria", function() {
     // create a fake Game
     function Game() {
       this.add = {
-        sprite: function(a,b,c) {return sprite;}
+        'sprite': function(a,b,c) {return sprite;}
       }
     };
     game = new Game();
@@ -31,6 +31,8 @@ describe("Asteria", function() {
   });
 
   it("can move left", function(){
+    console.log(asteria);
+
     asteria.moveLeft();
     expect(asteria.getVelocityX()).toBeLessThan(0);
     expect(sprite.animations.play).toHaveBeenCalledWith('left');

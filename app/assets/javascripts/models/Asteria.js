@@ -1,54 +1,59 @@
-var Asteria = function(game, x, y){
-  this.sprite = game.add.sprite(x, y, 'dude');
-};
+var Asteria = function(new_game, positionX, positionY){
+  var game = new_game;
+  var positionX = positionX;
+  var positionY = positionY;
+  var velocity = {x: 0, y:0};
+  this.sprite = game.add.sprite(0, 0, 'dude');
 
-Asteria.prototype.entersTheScene = function(){
-  this.sprite.body.bounce.y = 0.2;
-  this.sprite.body.gravity.y = 300;
-  this.sprite.body.collideWorldBounds = true;
-};
+  // var asteria_sprite = game.add(sprite);
 
-Asteria.prototype.setMotions = function(){
-  this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
-  this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
-};
+  this.entersTheScene = function(){
 
-Asteria.prototype.moveLeft = function() {
-  this.setVelocityX(-150);
-  this.sprite.animations.play('left');
-};
+  }
 
-Asteria.prototype.moveRight = function() {
-  this.setVelocityX(150);
-  this.sprite.animations.play('right');
-};
+  this.setMotions = function(){
+    this.sprite.body.bounce.y = 0.2;
+    this.sprite.body.gravity.y = 300;
+    this.sprite.body.collideWorldBounds = true;
+  }
 
-Asteria.prototype.standStill = function(){
-  this.sprite.animations.stop();
-  this.sprite.frame = 4;
-};
+  this.setVelocityX = function(number){
+    this.sprite.body.velocity.x = number;
+  }
 
-Asteria.prototype.jump = function() {
-  this.setVelocityY(-350);
+  this.moveLeft = function(){
+    console.log("Left");
+    this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
+    this.sprite.body.velocity.x = -200;
+    console.log(this.sprite.body.velocity);
+    // asteria_sprite().animations['play']('left'); //.play("left");
+  }
+
+  this.moveRight = function(){
+    console.log("Right");
+    this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+    this.sprite.body.velocity.x = 200;
+    console.log(this.sprite.body.velocity);
+    // asteria_sprite().animations['play']('right');
+  }
+
+  this.standStill = function(){
+    console.log("Stopped");
+    // this.sprite.animations.add('stop');
+  }
+
+  this.jump = function(){
+    this.sprite.body.velocity.y = -1500
+    // while(this.sprite.body.velocity.y > -10)
+    // {this.sprite.body.velocity.y--;}
+  }
+
+  this.getVelocityX = function(){
+    return this.sprite.body.velocity.x;
+  }
+
+  this.getVelocityY = function(){
+    return this.sprite.body.velocity.y;
+  }
 }
 
-// Helper methods
-Asteria.prototype.setVelocityX = function(velocityX) {
-  this.sprite.body.velocity.x = velocityX;
-};
-
-Asteria.prototype.getVelocityX = function() {
-  return this.sprite.body.velocity.x;
-};
-
-Asteria.prototype.setVelocityY = function(velocityY) {
-  this.sprite.body.velocity.y = velocityY;
-};
-
-Asteria.prototype.getVelocityY = function() {
-  return this.sprite.body.velocity.y;
-};
-
-Asteria.prototype.fire = function(){
-
-};

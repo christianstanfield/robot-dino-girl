@@ -3,7 +3,7 @@ function GameController() {
   var platforms;
   var cursors;
   var spacebar;
-  var shootWeapon; 
+  var shootWeapon;
   var stars;
   var score = 0;
   var scoreText;
@@ -54,7 +54,7 @@ GameController.prototype.create = function() {
         var ground = platforms.create(0, game.world.height - 64, 'ground');
 
         //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-      
+
     ground.scale.setTo(10, 2);
 
         //  This stops it from falling away when you jump on it
@@ -76,6 +76,9 @@ GameController.prototype.create = function() {
         asteria = new Asteria(game, 32, game.world.height - 150);
         player = asteria.sprite;
 
+        stars = game.add.group();
+        console.log(player);
+        console.log(asteria.sprite);
         //  We need to enable physics on the player
         game.physics.arcade.enable(player);
 
@@ -102,7 +105,6 @@ GameController.prototype.create = function() {
         // player.animations.add('right', [5, 6, 7, 8], 10, true);
 
         //  Finally some stars to collect
-        stars = game.add.group();
 
         //  We will enable physics for any star that is created in this group
         stars.enableBody = true;
@@ -115,13 +117,10 @@ GameController.prototype.create = function() {
 
 
     //  Here we'll create 12 of them evenly spaced apart
-   
+
 
     // rainStars(game.camera.x);
 
-    
-
-   
             //  Let gravity do its thing
             star.body.gravity.y = 300;
 
@@ -136,7 +135,7 @@ GameController.prototype.create = function() {
         cursors = game.input.keyboard.createCursorKeys();
         // console.log(cursors)
         spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        game.startFullScreen();
+        // game.startFullScreen();
         // this.stars = stars;
     }
 GameController.prototype.update = function() {
@@ -161,7 +160,7 @@ GameController.prototype.update = function() {
         game.physics.arcade.overlap(player, stars, collectStar, null, game);
 
 
-  
+
     if (player.position.x === 600) {
       rainStar();
     };
@@ -188,7 +187,7 @@ GameController.prototype.update = function() {
             asteria.jump();
         }
 
-    
+
 }
 
 GameController.prototype.render = function() {
