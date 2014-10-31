@@ -19,8 +19,7 @@
         game.load.image('ground', 'assets/platform.png');
         game.load.image('star', 'assets/star.png');
         game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-        game.load.image('ladder', 'assets/ladder.png')
-
+        game.load.image('ladder', 'assets/ladder.png');
     }
 
     var player;
@@ -33,6 +32,8 @@
     var score = 0;
     var scoreText;
 
+    // add climbing variables //
+
     function create() {
 
 
@@ -43,6 +44,7 @@
       game.input.onDown.add(world.setFullscreen, this);
       // window.onload.game.add(world.setFullscreen, this);
 
+    
 
     
 
@@ -183,10 +185,9 @@
 
     //  Collide the player and the stars with the platforms
     game.physics.arcade.collide(player, platforms);
-    game.physics.arcade.collide(stars, platforms);
-
+    game.physics.arcade.collide(stars, platforms); 
+        
         asteria.setVelocityX(0);
-
 
         if(cursors.left.isDown){
             asteria.moveLeft();
@@ -204,16 +205,43 @@
         }
 
         if (cursors.up.isDown){
-            game.physics.arcade.overlap(player, ladders, climb, null, this);
+          game.physics.arcade.overlap(player, ladders, climbUp, null, this);
         }
-}
+        else if (cursors.down.isDown){
+          game.physics.arcade.overlap(player, ladders, climbDown, null, this);
+        } 
+           
 
-    function climb (player, ladders) {
-        player.body.gravity.y = 0;
-        player.body.moveUp(200)
+        game.input.keyboard.onUpCallback = function( e ){
+            if(e.keyCode == Phaser.Keyboard.UP){
+                game.physics.arcade.overlap(player, ladders, stick, null, this);
+            }
+        };
+        
+
+
+        
 
     }
 
+
+
+
+
+
+    function climbUp (player, ladders) {
+        player.body.velocity.y = -100;
+    }
+
+    function climbDown (player, ladders) {
+        
+        player.body.velocity.y = 100;
+    }
+
+    function stick (player, ladders) {
+        player.body.velocity.y = 0;
+        player.body.gravity.y = 0;
+    }
 
     function collectStar (player, star) {
 
