@@ -11,6 +11,7 @@ class SessionsController < ApplicationController
       redirect_to root_url, :notice => "You logged in!"
     else
       flash.now.alert = "Invalid email or password!"
+      @user = User.new
       render "new"
     end
   end
