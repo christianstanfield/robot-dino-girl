@@ -1,14 +1,14 @@
 function GameController() {
-  var player;
-  var platforms;
-  var cursors;
-  var spacebar;
-  var shootWeapon;
-  var orbs;
-  var score;
-  var scoreText;
-  var world;
-  var game;
+  this.player;
+  this.platforms;
+  this.cursors;
+  this.spacebar;
+  this.shootWeapon;
+  this.orbs;
+  this.score;
+  this.scoreText;
+  this.world;
+  this.game;
 }
 
 GameController.prototype.run = function() {
