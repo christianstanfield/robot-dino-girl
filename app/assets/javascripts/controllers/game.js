@@ -12,6 +12,7 @@ function GameController() {
   this.game;
   this.healthbar;
   this.endGame;
+  this.ledge;
 }
 
 GameController.prototype.run = function() {
@@ -52,7 +53,7 @@ GameController.prototype.create = function() {
   // This stops it from falling away when you jump on it
   ground.body.immovable = true;
 
-  var ledge = platforms.create(400, 400, 'ground');
+  ledge = platforms.create(400, 400, 'ground');
   ledge.body.immovable = true;
   ledge.lifespan = 10000;
 
@@ -132,6 +133,16 @@ GameController.prototype.update = function() {
   // }
 
   // orbs.children.forEach(killDeadOrbs);
+  
+  ledge.alpha = ledge.lifespan / 10000;
+  
+  redOrbs.forEachAlive(function(orb){
+    orb.alpha = orb.lifespan / 10000;
+  }); 
+  
+  orbs.forEachAlive(function(orb){
+    orb.alpha = orb.lifespan / 10000;
+  });
 
   collectRedOrb = function(player, redOrb) {
       redOrb.kill();
