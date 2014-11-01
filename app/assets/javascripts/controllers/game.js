@@ -12,6 +12,7 @@ function GameController() {
   this.game;
   this.healthbar;
   this.endGame;
+  this.ledge;
 }
 
 GameController.prototype.run = function() {
@@ -54,6 +55,7 @@ GameController.prototype.create = function() {
   ground.body.immovable = true;
 
   var ledge = platforms.create(400, 400, 'cloud');
+
   ledge.body.immovable = true;
   ledge.scale.setTo(2, 2);
   ledge.body.setSize(90,35);
@@ -135,6 +137,16 @@ GameController.prototype.update = function() {
   // }
 
   // orbs.children.forEach(killDeadOrbs);
+  
+  ledge.alpha = ledge.lifespan / 10000;
+  
+  redOrbs.forEachAlive(function(orb){
+    orb.alpha = orb.lifespan / 10000;
+  }); 
+  
+  orbs.forEachAlive(function(orb){
+    orb.alpha = orb.lifespan / 10000;
+  });
 
   collectRedOrb = function(player, redOrb) {
       redOrb.kill();
