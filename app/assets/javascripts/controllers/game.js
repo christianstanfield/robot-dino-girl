@@ -21,6 +21,7 @@ GameController.prototype.run = function() {
 
 GameController.prototype.preload = function() {
   game.load.image('sky', 'assets/sky.png');
+  game.load.image('space', 'assets/space.jpg');
   game.load.image('ground', 'assets/platform copy.png');
   game.load.image('redOrb', 'assets/unsafe_orb.png');
   game.load.image('diamond', 'assets/diamond.png')
@@ -33,15 +34,15 @@ GameController.prototype.create = function() {
 
   // CREATE THE WORLD
   world = new World();
-  world.setCanvas(game, 0, 0, 1600, 600);
+  world.setCanvas(game, 0, 0, 1280, 600);
 
   // Set fullscreen on mouseclick
   game.input.onDown.add(world.setFullscreen, game);
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-  var sky = game.add.sprite(0, 0, 'sky');
-  sky.scale.setTo(10,1);
+  var sky = game.add.sprite(0, 0, 'space');
+  // sky.scale.setTo(10,1);
 
   platforms = game.add.group();
   //  Enable physics
@@ -67,7 +68,7 @@ GameController.prototype.create = function() {
 
   healthbar = game.add.group();
   for (var i = 0; i < 5; i++) {
-    var diamond = healthbar.create(i * 20, 0, 'diamond');
+    var diamond = healthbar.create((i * 30)+16, 16, 'diamond');
   }
 
   healthbar.fixedToCamera = true;
@@ -104,7 +105,7 @@ GameController.prototype.create = function() {
 
   //  CREATE SCORE
   score = 0;
-  scoreText = game.add.text(16, 16, 'Score: ' + score, { fontSize: '32px', fill: '#000' });
+  scoreText = game.add.text(650, 16, 'Score: ' + score, { fontSize: '32px', fill: '#FFF' });
   scoreText.fixedToCamera = true;
 
 }
