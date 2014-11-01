@@ -69,6 +69,8 @@ GameController.prototype.create = function() {
   for (var i = 0; i < 5; i++) {
     var diamond = healthbar.create(i * 20, 0, 'diamond');
   }
+  
+  healthbar.fixedToCamera = true;
 
   //  We need to enable physics on the player
   game.physics.arcade.enable(player);
