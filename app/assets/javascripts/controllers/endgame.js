@@ -12,7 +12,8 @@ EndGame.prototype.setConditions = function(score){
   // Set WIN condition in the IF CONDITIONAL
   if (player.alive === false) {
     this.game.paused = true;
-    this.game.add.sprite(0, 0, 'win');
+    message_layer = this.game.add.sprite(200, 150, 'win');
+    message_layer.fixedToCamera = true
     this.sendStats(score);
     $('#game-fullscreen').hide();
     $('#start-game-link').show();
@@ -36,3 +37,5 @@ EndGame.prototype.sendStats = function(score){
     $('#stats ul').first().prepend(serverResponse);
   });
 }
+
+

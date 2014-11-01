@@ -7,6 +7,9 @@ class UsersController < ApplicationController
     if user.valid?
       user.save
       session[:user_id] = user.id
+      @game_reports = current_user.game_reports
+      @level_reports = current_user.level_reports
+      @high_score = current_user.get_high_score
       render :"users/show"
       # redirect_to "/users/#{user.id}"
     else
