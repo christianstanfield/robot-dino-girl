@@ -10,24 +10,27 @@ EndGame.prototype.loadAssets = function() {
 
 EndGame.prototype.setConditions = function(score){
   // Set WIN condition in the IF CONDITIONAL
-    if (player.position.x >= 600) {
-        this.game.paused = true;
-        this.game.add.sprite(0, 0, 'win');
-        this.sendStats(score);
-    };
+  if (player.position.x >= 600) {
+    this.game.paused = true;
+    this.game.add.sprite(0, 0, 'win');
+    this.sendStats(score);
+  };
 
   // Set LOSE condition in the IF CONDITIONAL
-      // if (player.position.x >= 600) {
-      //   game.paused = true
-      //   game.add.sprite(0, 0, 'lose')
-      // };
+    // if (player.position.x >= 600) {
+    //   game.paused = true
+    //   game.add.sprite(0, 0, 'lose')
+    // };
 }
 
 EndGame.prototype.sendStats = function(score){
-  var url = '/', // Input new route for
+  var urlOne = '/game_reports',
+      urlTwo = '/level_reports',
       data = { 'score': score };
-    $.post(url, data, function(serverResponse, status, jqXHR) {
-      // Do things with serverResponse here
-    });
+  $.get(urlOne, function(serverResponse, status, jqXHR) {
+    // Do things with serverResponse here
+  });
+  $.post(urlTwo, data, function(serverResponse, status, jqXHR) {
+    // Do things with serverResponse here
+  });
 }
-

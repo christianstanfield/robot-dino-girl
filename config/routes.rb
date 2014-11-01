@@ -14,6 +14,10 @@ Rails.application.routes.draw do
   post 'users' => 'users#create'
   get 'users/:id' => 'users#show'
 
+  get 'game_reports' => 'game_reports#create'
+  post 'level_reports' => 'level_reports#create'
+
+
   # get 'game' => 'game#show'
 
   # Example of regular route:

@@ -9,10 +9,12 @@ function GameController() {
   var scoreText;
   var world;
   var game;
+  var endGame
 }
 
 GameController.prototype.run = function() {
   game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv', { preload: this.preload, create: this.create, update: this.update, render: this.render });
+  endGame = new EndGame(game);
 }
 
 GameController.prototype.preload = function() {
@@ -21,6 +23,7 @@ GameController.prototype.preload = function() {
   game.load.image('ground', 'assets/platform copy.png');
   game.load.image('blueOrb', 'assets/safe_orb.png');
   game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+  endGame.loadAssets();
 }
 
 GameController.prototype.create = function() {
@@ -38,7 +41,7 @@ GameController.prototype.create = function() {
   sky.scale.setTo(10,1);
 
   platforms = game.add.group();
-  //  Enable physics 
+  //  Enable physics
   platforms.enableBody = true;
 
   var ground = platforms.create(0, game.world.height + 60);
