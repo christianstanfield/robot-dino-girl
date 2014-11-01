@@ -1,4 +1,8 @@
 $( document ).ready(function() {
   var gameController = new GameController();
-  gameController.run();
+  $('#start-game-link').on('click', function(){
+    gameController.run();
+    $(this).hide();
+  });
+
 });
