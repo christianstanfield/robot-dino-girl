@@ -10,10 +10,12 @@ EndGame.prototype.loadAssets = function() {
 
 EndGame.prototype.setConditions = function(score){
   // Set WIN condition in the IF CONDITIONAL
-  if (player.position.x >= 600) {
+  if (player.alive === false) {
     this.game.paused = true;
     this.game.add.sprite(0, 0, 'win');
     this.sendStats(score);
+    $('#game-fullscreen').hide();
+    $('#start-game-link').show();
   };
 
   // Set LOSE condition in the IF CONDITIONAL

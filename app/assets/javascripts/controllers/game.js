@@ -109,6 +109,8 @@ GameController.prototype.create = function() {
 
 GameController.prototype.update = function() {
 
+  endGame.setConditions(score);
+
 
   //  Collide the player and the redOrbs with the platforms
   game.physics.arcade.collide(player, platforms);
