@@ -4,73 +4,67 @@ function GameController() {
   var cursors;
   var spacebar;
   var shootWeapon;
-  var stars;
-  var score = 0;
+  var orbs;
+  var score;
   var scoreText;
   var world;
   var game;
+  var endGame
 }
 
 GameController.prototype.run = function() {
-  game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: this.preload, create: this.create, update: this.update, render: this.render });
+  game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv', { preload: this.preload, create: this.create, update: this.update, render: this.render });
+  endGame = new EndGame(game);
 }
 
 GameController.prototype.preload = function() {
   game.load.image('sky', 'assets/sky.png');
-  game.load.image('ground', 'assets/platform.png');
-  game.load.image('star', 'assets/star.png');
+  // game.load.image('ground', 'assets/platform.png');
+  game.load.image('ground', 'assets/platform copy.png');
+  game.load.image('blueOrb', 'assets/safe_orb.png');
   game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+  endGame.loadAssets();
 }
 
 GameController.prototype.create = function() {
-  // World driver code
+
+  // CREATE THE WORLD
   world = new World();
   world.setCanvas(game, 0, 0, 1600, 600);
 
   // Set fullscreen on mouseclick
   game.input.onDown.add(world.setFullscreen, game);
-  // window.onload.game.add(world.setFullscreen, this);
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
   var sky = game.add.sprite(0, 0, 'sky');
   sky.scale.setTo(10,1);
 
-  //  The platforms group contains the ground and the 2 ledges we can jump on
   platforms = game.add.group();
-
-  //  We will enable physics for any object that is created in this group
+  //  Enable physics
   platforms.enableBody = true;
 
-  var ground = platforms.create(0, game.world.height - 64, 'ground');
-
-  ground.scale.setTo(10, 2);
-
-  //  This stops it from falling away when you jump on it
+  var ground = platforms.create(0, game.world.height + 60);
+  ground.scale.setTo(100, 1);
+  // This stops it from falling away when you jump on it
   ground.body.immovable = true;
 
   var ledge = platforms.create(400, 400, 'ground');
   ledge.body.immovable = true;
 
-  ledge = platforms.create(-150, 250, 'ground');
-  ledge.body.immovable = true;
-
-  asteria = new Asteria(game, 32, game.world.height - 150);
+  // CREATE ASTERIA
+  asteria = new Asteria(game, 500, 0);
   player = asteria.sprite;
+
+  //  Enable physics on the player
+  game.physics.arcade.enable(player);
   asteria.entersTheScene();
   asteria.setMotions();
 
-  //  We need to enable physics on the player
-  game.physics.arcade.enable(player);
-
+  // Set the camera
   world.setCamera(game, player);
 
-  stars = game.add.group();
-  stars.enableBody = true;
-
-  //  The score
-  scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-  //  Our controls.
+  //  SET CONTROLS
   cursors = game.input.keyboard.createCursorKeys();
   spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
@@ -80,56 +74,79 @@ GameController.prototype.create = function() {
         asteria.hop();
     }
   }
+
+  // CREATE BLUE ORBS
+  orbs = game.add.group();
+  orbs.enableBody = true;
+  game.time.events.loop(Phaser.Timer.SECOND * 3, rainOrbs, game);
+
+  //  CREATE SCORE
+  score = 0;
+  scoreText = game.add.text(16, 16, 'Score: ' + score, { fontSize: '32px', fill: '#000' });
+  scoreText.fixedToCamera = true;
+
 }
 
 GameController.prototype.update = function() {
 
-  //  Collide the player and the stars with the platforms
+  game.physics.arcade.collide(orbs, platforms);
   game.physics.arcade.collide(player, platforms);
-  game.physics.arcade.collide(stars, platforms);
 
   asteria.setVelocityX(0);
-  
-  collectStar = function(player, star) {
-    star.kill();
+
+  // killDeadStars = function(star) {
+  //   if (star.body.velocity.y < 1 ) {
+  //     star.kill();
+  //   }
+  // }
+
+  // orbs.children.forEach(killDeadStars);
+
+  collectOrbs = function(player, orb) {
+    orb.kill();
     //  Add and update the score
-    // score += 10;
-    // scoreText.text = 'Score: ' + score;
+    score += 10;
+    scoreText.text = 'Score: ' + score;
   }
 
-  //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-  game.physics.arcade.overlap(player, stars, collectStar, null, game);
+  game.physics.arcade.overlap(player, orbs, collectOrbs, null, this);
 
-  if(cursors.left.isDown){
-      asteria.moveLeft();
-  }
-  else if(cursors.right.isDown){
-      asteria.moveRight();
-  }
-  else {
-      asteria.standStill();
+  // function collisionHandler (obj1, obj2) {
+  //   obj1.kill();
+  // }
+
+  // game.physics.arcade.collide(player, ground, collisionHandler, null, this);
+  // game.physics.arcade.collide(orbs, ground, collisionHandler, null, this);
+
+  if (cursors.left.isDown) {
+    asteria.moveLeft();
+  } else if (cursors.right.isDown) {
+    asteria.moveRight();
+  } else {
+    asteria.standStill();
   }
 
   //  Allow the player to jump if they are touching the ground.
-  if(spacebar.isDown && player.body.touching.down){
-      asteria.jump();
+  // if (spacebar.isDown && player.body.touching.down) {
+  //   asteria.jump();
+  // }
+
+  //  Autojump for minigame
+  if (player.body.touching.down) {
+    asteria.jump();
   }
 
-  if(cursors.down.isDown && player.body.touching.down && cursors.left.isDown){
+  if (cursors.down.isDown && player.body.touching.down && cursors.left.isDown) {
       asteria.crawlLeft();
-  }
-  else if(cursors.down.isDown && player.body.touching.down && cursors.right.isDown){
+  } else if (cursors.down.isDown && player.body.touching.down && cursors.right.isDown) {
       asteria.crawlRight();
-  }
-  else if(cursors.down.isDown && player.body.touching.down){
+  } else if (cursors.down.isDown && player.body.touching.down) {
       asteria.crouch();
   }
-
-
 }
 
 GameController.prototype.render = function() {
 
-  game.debug.cameraInfo(game.camera, 32, 32);
-  game.debug.spriteCoords(player, 32, 500);
+  // game.debug.cameraInfo(game.camera, 32, 32);
+  // game.debug.spriteCoords(player, 32, 500);
 }
