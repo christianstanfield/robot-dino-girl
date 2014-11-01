@@ -22,7 +22,7 @@ Asteria.prototype.moveLeft = function() {
 };
 
 Asteria.prototype.moveRight = function() {
-  this.setVelocityX(150);
+  this.setVelocityX(250);
   this.sprite.animations.play('right');
 };
 
