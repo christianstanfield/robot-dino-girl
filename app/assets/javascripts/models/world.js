@@ -1,5 +1,5 @@
 function World () {
-  
+
 };
 
 World.prototype.setCanvas = function(game, x, y, width, height) {
@@ -32,6 +32,7 @@ function rainOrbs () {
     var orb = orbs.create(game.world.randomX, 0, 'blueOrb');
     orb.body.gravity.y = 100;
     orb.body.bounce.y = 0.7 + Math.random() * 0.2;
+    orb.lifespan = 10000;
   }
 }
 

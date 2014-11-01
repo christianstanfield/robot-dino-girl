@@ -13,6 +13,7 @@ function GameController() {
 
 GameController.prototype.run = function() {
   game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv', { preload: this.preload, create: this.create, update: this.update, render: this.render });
+  endGame = new EndGame(game);
 }
 
 GameController.prototype.preload = function() {
@@ -21,6 +22,7 @@ GameController.prototype.preload = function() {
   game.load.image('ground', 'assets/platform copy.png');
   game.load.image('blueOrb', 'assets/safe_orb.png');
   game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+  endGame.loadAssets();
 }
 
 GameController.prototype.create = function() {
@@ -38,7 +40,7 @@ GameController.prototype.create = function() {
   sky.scale.setTo(10,1);
 
   platforms = game.add.group();
-  //  Enable physics 
+  //  Enable physics
   platforms.enableBody = true;
 
   var ground = platforms.create(0, game.world.height + 60);
@@ -48,6 +50,7 @@ GameController.prototype.create = function() {
 
   var ledge = platforms.create(400, 400, 'ground');
   ledge.body.immovable = true;
+  ledge.lifespan = 10000;
 
   // CREATE ASTERIA
   asteria = new Asteria(game, 500, 0);
@@ -91,13 +94,17 @@ GameController.prototype.update = function() {
 
   asteria.setVelocityX(0);
 
-  // killDeadStars = function(star) {
-  //   if (star.body.velocity.y < 1 ) {
-  //     star.kill();
+  // killDeadOrbs = function(orb) {
+  //   if (orb.body.velocity.y < 1 ) {
+  //     orb.bounceCount += 1;
+  //     console.log(orb.bounceCount);
+  //   }
+  //   if (orb.bounceCount > 2) {
+  //     orb.kill();
   //   }
   // }
 
-  // orbs.children.forEach(killDeadStars);
+  // orbs.children.forEach(killDeadOrbs);
 
   collectOrbs = function(player, orb) {
     orb.kill();
