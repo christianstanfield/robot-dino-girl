@@ -8,8 +8,8 @@ Asteria.prototype.entersTheScene = function(){
   this.sprite.body.bounce.y = 0.2;
   this.sprite.body.gravity.y = 300;
   this.sprite.body.collideWorldBounds = false;
-  this.sprite.checkWorldBounds = true;
-  this.sprite.outOfBoundsKill = true;
+  // this.sprite.checkWorldBounds = true;
+  // this.sprite.outOfBoundsKill = true;
 };
 
 Asteria.prototype.setMotions = function(){

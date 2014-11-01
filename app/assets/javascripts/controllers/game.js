@@ -21,11 +21,10 @@ GameController.prototype.run = function() {
 }
 
 GameController.prototype.preload = function() {
-  game.load.image('sky', 'assets/sky.png');
   game.load.image('space', 'assets/space.jpg');
   game.load.image('cloud', 'assets/cloud-sprite.png');
   game.load.image('redOrb', 'assets/unsafe_orb.png');
-  game.load.image('diamond', 'assets/diamond.png')
+  game.load.image('heart', 'assets/heart-sprite.png')
   game.load.image('blueOrb', 'assets/safe_orb.png');
   game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
   endGame.loadAssets();
@@ -54,10 +53,9 @@ GameController.prototype.create = function() {
   // This stops it from falling away when you jump on it
   ground.body.immovable = true;
 
-  var ledge = platforms.create(400, 400, 'cloud');
+  ledge = platforms.create(400, 400, 'cloud');
 
   ledge.body.immovable = true;
-  ledge.scale.setTo(2, 2);
   ledge.body.setSize(90,35);
   ledge.lifespan = 10000;
 
@@ -72,7 +70,7 @@ GameController.prototype.create = function() {
 
   healthbar = game.add.group();
   for (var i = 0; i < 5; i++) {
-    var diamond = healthbar.create((i * 30)+16, 16, 'diamond');
+    var diamond = healthbar.create((i * 40)+16, 16, 'heart');
   }
 
   healthbar.fixedToCamera = true;
@@ -162,7 +160,7 @@ GameController.prototype.update = function() {
   // Health Conditions //
 
   loseHealth = function() {
-    if (asteria.health === 0){
+    if (asteria.health === 1){
       player.kill();
     }
     asteria.health -= 1
