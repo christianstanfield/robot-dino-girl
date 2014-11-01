@@ -8,18 +8,3 @@ class LevelReportsController < ApplicationController
   end
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# User.first.game_reports.first.level_reports.new
