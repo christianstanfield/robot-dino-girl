@@ -24,10 +24,15 @@ EndGame.prototype.setConditions = function(score){
 }
 
 EndGame.prototype.sendStats = function(score){
-  var url = '/', // Input new route for
+  var urlOne = '/game_reports',
+      urlTwo = '/level_reports',
       data = { 'score': score };
-    $.post(url, data, function(serverResponse, status, jqXHR) {
-      // Do things with serverResponse here
-    });
+  $.get(urlOne, function(serverResponse, status, jqXHR) {
+    // Do things with serverResponse here
+  });
+  $.post(urlTwo, data, function(serverResponse, status, jqXHR) {
+    // Do things with serverResponse here
+  });
 }
 
+// User.first.game_reports.first.level_reports.new

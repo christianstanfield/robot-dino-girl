@@ -1,5 +1,5 @@
 function World () {
-  
+
 };
 
 World.prototype.setCanvas = function(game, x, y, width, height) {
