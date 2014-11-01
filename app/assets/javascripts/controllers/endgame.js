@@ -33,6 +33,6 @@ EndGame.prototype.sendStats = function(score){
     // Do things with serverResponse here
   });
   $.post(urlTwo, data, function(serverResponse, status, jqXHR) {
-    // Do things with serverResponse here
+    $('#stats ul').first().prepend(serverResponse);
   });
 }

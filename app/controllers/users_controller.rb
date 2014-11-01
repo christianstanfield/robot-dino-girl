@@ -1,12 +1,17 @@
 class UsersController < ApplicationController
   def create
     puts "CREATE"
-    user = User.create(user_params)
+    user = User.new(user_params)
+    puts user.valid?
+    puts user.errors
     if user.valid?
-      redirect_to root_url, :notice => "Signed up!"
+      user.save
+      session[:user_id] = user.id
+      render :"users/show"
+      # redirect_to "/users/#{user.id}"
     else
       @user = user
-      render "sessions/new"
+      redirect_to root_url
     end
   end
 

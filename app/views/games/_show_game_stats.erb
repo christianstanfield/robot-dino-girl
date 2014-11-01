@@ -1,17 +1,6 @@
-<%= link_to "Log out", logout_path %>
-<button id="start-game-link">Start a new game!!!</button>
-<button id="game-fullscreen">Go Fullscreen!</button>
-<div id='gameDiv'></div>
-<h1>My stats</h1>
-<div id="stats">
-<h2>High score: <%= @high_score %></h2>
-
-<ul>
-<% count = @game_reports.count %>
-<% @game_reports.reverse.each do |game_report| %>
   <li>
-    <h2>Game <%= count %></h2>
-    <% game_report.level_reports.each_with_index do |level_report, index| %>
+    <h2>Game <%= current_user.game_reports.count %></h2>
+    <% @game_report.level_reports.each_with_index do |level_report, index| %>
       <ul>
         <li>Points: <%= level_report.points %></li>
         <%if level_report.completion_time > 0 %>
@@ -27,9 +16,5 @@
           <li>Relics collected: <%= level_report.relics_collected %></li>
         <% end %>
       </ul>
-    <% count -= 1 %>
     <% end %>
   </li>
-<% end %>
-</ul>
-</div>
