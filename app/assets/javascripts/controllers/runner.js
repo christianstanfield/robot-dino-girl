@@ -11,4 +11,14 @@ $( document ).ready(function() {
     world.setFullscreen(game);
   });
 
+  $('#new_account').on('click', function(){
+    $('#login').hide();
+    $('#create_account').show();
+  });
+
+  $('#return_login').on('click', function(){
+    $('#create_account').hide();
+    $('#login').show();
+  });  
+
 });

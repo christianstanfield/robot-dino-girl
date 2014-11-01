@@ -32,6 +32,7 @@ function rainRedOrbs (cameraPosition) {
     var redOrb = redOrbs.create(game.world.randomX, 0, 'redOrb');
     redOrb.body.gravity.y = 100;
     redOrb.body.bounce.y = 0.7 + Math.random() * 0.2;
+    redOrb.lifespan = 10000;
   }
 }
 

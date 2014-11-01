@@ -1,15 +1,21 @@
-<h1>Log in</h1>
-<%= form_tag sessions_path do %>
-  <%= text_field_tag :username, params[:username], placeholder: "Username" %>
-  <%= password_field_tag :password, params[:password], placeholder: "Password" %>
-  <%= submit_tag "Log in" %>
-<% end %>
+<div class="login" id="login">
+  <h1>Log in</h1>
+  <%= form_tag sessions_path do %>
+    <%= text_field_tag :username, params[:username], placeholder: "Username" %> <br>
+    <%= password_field_tag :password, params[:password], placeholder: "Password" %> <br>
+    <%= submit_tag "Login" %>
+  <% end %>
+  <button id="new_account">Create an Account</button>
+</div>
 
-<h1>Or create a new account</h1>
-<%= form_for @user do |f| %>
-  <%= f.text_field :username, placeholder: "Username" %>
-  <%= f.password_field :password, placeholder: "Password" %>
-  <%= f.password_field :password_confirmation, placeholder: "Enter password again" %>
-  <%= f.text_field :email, placeholder: "Email" %>
-  <%= f.submit "Create account" %>
-<% end %>
+<div class="login" id="create_account">
+  <h1>Create Account</h1>
+  <%= form_for @user do |f| %>
+    <%= f.text_field :username, placeholder: "Username" %>
+    <%= f.text_field :email, placeholder: "Email" %>
+    <%= f.password_field :password, placeholder: "Password" %>
+    <%= f.password_field :password_confirmation, placeholder: "Enter password again" %> <br>
+    <%= f.submit "Create Account" %> <br>
+  <button id="return_login">Back to Login</button>
+  <% end %>
+</div>

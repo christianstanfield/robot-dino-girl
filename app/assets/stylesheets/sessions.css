@@ -1,0 +1,27 @@
+.login {
+  margin: 0 auto;
+  text-align: center;  
+  border: 2px solid black;
+  width: 300px;
+  padding-bottom: 30px;
+  margin-top: 75px;
+  border-radius: 10px;
+}
+
+.login input {
+  padding: 4px;
+  margin: 5px;
+}
+
+/*.login input[type="submit"] {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.login button {
+  margin: 5px;
+}*/
+
+#create_account {
+  display: none;
+}

@@ -12,6 +12,7 @@ function GameController() {
   this.game;
   this.healthbar;
   this.endGame;
+  this.ledge;
 }
 
 GameController.prototype.run = function() {
@@ -20,10 +21,10 @@ GameController.prototype.run = function() {
 }
 
 GameController.prototype.preload = function() {
-  game.load.image('sky', 'assets/sky.png');
-  game.load.image('ground', 'assets/platform copy.png');
+  game.load.image('space', 'assets/space.jpg');
+  game.load.image('cloud', 'assets/cloud-sprite.png');
   game.load.image('redOrb', 'assets/unsafe_orb.png');
-  game.load.image('diamond', 'assets/diamond.png')
+  game.load.image('heart', 'assets/heart-sprite.png')
   game.load.image('blueOrb', 'assets/safe_orb.png');
   game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
   endGame.loadAssets();
@@ -33,15 +34,15 @@ GameController.prototype.create = function() {
 
   // CREATE THE WORLD
   world = new World();
-  world.setCanvas(game, 0, 0, 1600, 600);
+  world.setCanvas(game, 0, 0, 1280, 600);
 
   // Set fullscreen on mouseclick
   game.input.onDown.add(world.setFullscreen, game);
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-  var sky = game.add.sprite(0, 0, 'sky');
-  sky.scale.setTo(10,1);
+  var sky = game.add.sprite(0, 0, 'space');
+  // sky.scale.setTo(10,1);
 
   platforms = game.add.group();
   //  Enable physics
@@ -52,12 +53,14 @@ GameController.prototype.create = function() {
   // This stops it from falling away when you jump on it
   ground.body.immovable = true;
 
-  var ledge = platforms.create(400, 400, 'ground');
+  ledge = platforms.create(400, 400, 'cloud');
+
   ledge.body.immovable = true;
+  ledge.body.setSize(90,35);
   ledge.lifespan = 10000;
 
   // CREATE ASTERIA
-  asteria = new Asteria(game, 500, 0);
+  asteria = new Asteria(game, 450, 0);
   player = asteria.sprite;
 
   // Initializing asteria's healthbar //
@@ -67,7 +70,7 @@ GameController.prototype.create = function() {
 
   healthbar = game.add.group();
   for (var i = 0; i < 5; i++) {
-    var diamond = healthbar.create(i * 20, 0, 'diamond');
+    var diamond = healthbar.create((i * 40)+16, 16, 'heart');
   }
 
   healthbar.fixedToCamera = true;
@@ -104,7 +107,7 @@ GameController.prototype.create = function() {
 
   //  CREATE SCORE
   score = 0;
-  scoreText = game.add.text(16, 16, 'Score: ' + score, { fontSize: '32px', fill: '#000' });
+  scoreText = game.add.text(650, 16, 'Score: ' + score, { fontSize: '32px', fill: '#FFF' });
   scoreText.fixedToCamera = true;
 
 }
@@ -131,6 +134,16 @@ GameController.prototype.update = function() {
   // }
 
   // orbs.children.forEach(killDeadOrbs);
+  
+  ledge.alpha = ledge.lifespan / 10000;
+  
+  redOrbs.forEachAlive(function(orb){
+    orb.alpha = orb.lifespan / 10000;
+  }); 
+  
+  orbs.forEachAlive(function(orb){
+    orb.alpha = orb.lifespan / 10000;
+  });
 
   collectRedOrb = function(player, redOrb) {
       redOrb.kill();
@@ -146,7 +159,7 @@ GameController.prototype.update = function() {
   // Health Conditions //
 
   loseHealth = function() {
-    if (asteria.health === 0){
+    if (asteria.health === 1){
       player.kill();
     }
     asteria.health -= 1
@@ -201,4 +214,5 @@ GameController.prototype.render = function() {
 
   // game.debug.cameraInfo(game.camera, 32, 32);
   // game.debug.spriteCoords(player, 32, 500);
+  // game.debug.body(platforms.children[1]);
 }
