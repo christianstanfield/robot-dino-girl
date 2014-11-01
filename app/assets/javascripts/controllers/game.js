@@ -5,10 +5,13 @@ function GameController() {
   this.spacebar;
   this.shootWeapon;
   this.orbs;
+  this.redOrbs;
   this.score;
   this.scoreText;
   this.world;
   this.game;
+  this.healthbar;
+  this.endGame;
 }
 
 GameController.prototype.run = function() {
@@ -18,8 +21,9 @@ GameController.prototype.run = function() {
 
 GameController.prototype.preload = function() {
   game.load.image('sky', 'assets/sky.png');
-  // game.load.image('ground', 'assets/platform.png');
   game.load.image('ground', 'assets/platform copy.png');
+  game.load.image('redOrb', 'assets/unsafe_orb.png');
+  game.load.image('diamond', 'assets/diamond.png')
   game.load.image('blueOrb', 'assets/safe_orb.png');
   game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
   endGame.loadAssets();
@@ -56,7 +60,17 @@ GameController.prototype.create = function() {
   asteria = new Asteria(game, 500, 0);
   player = asteria.sprite;
 
-  //  Enable physics on the player
+  // Initializing asteria's healthbar //
+ 
+  // player.maxHealth = 5
+  // player.health = 5
+
+  healthbar = game.add.group();
+  for (var i = 0; i < 5; i++) {
+    var diamond = healthbar.create(i * 20, 0, 'diamond');
+  }
+
+  //  We need to enable physics on the player
   game.physics.arcade.enable(player);
   asteria.entersTheScene();
   asteria.setMotions();
@@ -75,9 +89,15 @@ GameController.prototype.create = function() {
     }
   }
 
+  // Falling redOrbs
+  redOrbs = game.add.group();
+  redOrbs.enableBody = true;
+  game.time.events.loop(Phaser.Timer.SECOND * 5, rainRedOrbs, game);
+
   // CREATE BLUE ORBS
   orbs = game.add.group();
   orbs.enableBody = true;
+  rainOrbs();
   game.time.events.loop(Phaser.Timer.SECOND * 3, rainOrbs, game);
 
   //  CREATE SCORE
@@ -89,8 +109,11 @@ GameController.prototype.create = function() {
 
 GameController.prototype.update = function() {
 
-  game.physics.arcade.collide(orbs, platforms);
+
+  //  Collide the player and the redOrbs with the platforms
   game.physics.arcade.collide(player, platforms);
+  game.physics.arcade.collide(redOrbs, platforms);
+  game.physics.arcade.collide(orbs, platforms);
 
   asteria.setVelocityX(0);
 
@@ -106,12 +129,33 @@ GameController.prototype.update = function() {
 
   // orbs.children.forEach(killDeadOrbs);
 
+  collectRedOrb = function(player, redOrb) {
+      redOrb.kill();
+  }
+
   collectOrbs = function(player, orb) {
     orb.kill();
     //  Add and update the score
     score += 10;
     scoreText.text = 'Score: ' + score;
   }
+
+  // Health Conditions //
+
+  loseHealth = function() {
+    if (player.health === 0){
+      player.kill();
+    }
+    player.health -= 1
+    console.log(player.health)
+    healthbar.children.pop();
+  }
+
+  game.physics.arcade.overlap(player, redOrbs, loseHealth, null, game);
+  game.physics.arcade.overlap(player, redOrbs, collectRedOrb, null, game);
+
+
+  // Movement Conditions //
 
   game.physics.arcade.overlap(player, orbs, collectOrbs, null, this);
 
@@ -139,6 +183,7 @@ GameController.prototype.update = function() {
   if (player.body.touching.down) {
     asteria.jump();
   }
+
 
   if (cursors.down.isDown && player.body.touching.down && cursors.left.isDown) {
       asteria.crawlLeft();

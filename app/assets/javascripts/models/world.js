@@ -27,6 +27,14 @@ World.prototype.setFullscreen = function(game) {
 };
 
 
+function rainRedOrbs (cameraPosition) {
+  for (var i = 0; i < Math.floor(Math.random()*10+5); i++) {
+    var redOrb = redOrbs.create(game.world.randomX, 0, 'redOrb');
+    redOrb.body.gravity.y = 100;
+    redOrb.body.bounce.y = 0.7 + Math.random() * 0.2;
+  }
+}
+
 function rainOrbs () {
   for (var i = 0; i < Math.floor(Math.random()*10+5); i++) {
     var orb = orbs.create(game.world.randomX, 0, 'blueOrb');

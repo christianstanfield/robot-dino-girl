@@ -1,5 +1,7 @@
 var Asteria = function(game, x, y){
   this.sprite = game.add.sprite(x, y, 'dude');
+  this.maxHealth = 5;
+  this.health = 5;
 };
 
 Asteria.prototype.entersTheScene = function(){
