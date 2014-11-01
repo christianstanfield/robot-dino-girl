@@ -60,7 +60,7 @@ GameController.prototype.create = function() {
   ledge.lifespan = 10000;
 
   // CREATE ASTERIA
-  asteria = new Asteria(game, 500, 0);
+  asteria = new Asteria(game, 450, 0);
   player = asteria.sprite;
 
   // Initializing asteria's healthbar //
