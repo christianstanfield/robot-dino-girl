@@ -22,7 +22,7 @@ GameController.prototype.run = function() {
 GameController.prototype.preload = function() {
   game.load.image('sky', 'assets/sky.png');
   game.load.image('space', 'assets/space.jpg');
-  game.load.image('ground', 'assets/platform copy.png');
+  game.load.image('cloud', 'assets/cloud-sprite.png');
   game.load.image('redOrb', 'assets/unsafe_orb.png');
   game.load.image('diamond', 'assets/diamond.png')
   game.load.image('blueOrb', 'assets/safe_orb.png');
@@ -53,8 +53,10 @@ GameController.prototype.create = function() {
   // This stops it from falling away when you jump on it
   ground.body.immovable = true;
 
-  var ledge = platforms.create(400, 400, 'ground');
+  var ledge = platforms.create(400, 400, 'cloud');
   ledge.body.immovable = true;
+  ledge.scale.setTo(2, 2);
+  ledge.body.setSize(90,35);
   ledge.lifespan = 10000;
 
   // CREATE ASTERIA
@@ -202,4 +204,5 @@ GameController.prototype.render = function() {
 
   // game.debug.cameraInfo(game.camera, 32, 32);
   // game.debug.spriteCoords(player, 32, 500);
+  // game.debug.body(platforms.children[1]);
 }
