@@ -1,12 +1,15 @@
 var Asteria = function(game, x, y){
   this.sprite = game.add.sprite(x, y, 'dude');
+  this.maxHealth = 5;
+  this.health = 5;
 };
 
 Asteria.prototype.entersTheScene = function(){
   this.sprite.body.bounce.y = 0.2;
   this.sprite.body.gravity.y = 300;
   this.sprite.body.collideWorldBounds = false;
-  this.sprite.body.outOfBoundsKill = true;
+  this.sprite.checkWorldBounds = true;
+  this.sprite.outOfBoundsKill = true;
 };
 
 Asteria.prototype.setMotions = function(){
