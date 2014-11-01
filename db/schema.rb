@@ -47,7 +47,6 @@ ActiveRecord::Schema.define(version: 20141030192212) do
   end
 
   create_table "welcomes", force: true do |t|
-    t.integer  "score"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
