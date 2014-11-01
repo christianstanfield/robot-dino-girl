@@ -69,7 +69,7 @@ GameController.prototype.create = function() {
   for (var i = 0; i < 5; i++) {
     var diamond = healthbar.create(i * 20, 0, 'diamond');
   }
-  
+
   healthbar.fixedToCamera = true;
 
   //  We need to enable physics on the player
@@ -147,11 +147,10 @@ GameController.prototype.update = function() {
   // Health Conditions //
 
   loseHealth = function() {
-    if (player.health === 0){
+    if (asteria.health === 0){
       player.kill();
     }
-    player.health -= 1
-    console.log(player.health)
+    asteria.health -= 1
     healthbar.children.pop();
   }
 
