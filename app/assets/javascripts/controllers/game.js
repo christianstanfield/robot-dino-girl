@@ -61,8 +61,8 @@ GameController.prototype.create = function() {
 
   // Initializing asteria's healthbar //
  
-  player.maxHealth = 5
-  player.health = 5
+  // player.maxHealth = 5
+  // player.health = 5
 
   healthbar = game.add.group();
   for (var i = 0; i < 5; i++) {
