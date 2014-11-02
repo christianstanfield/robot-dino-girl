@@ -14,6 +14,7 @@ EndGame.prototype.setConditions = function(score){
     this.game.paused = true;
     high_score = this.sendStats(score);
     message_layer = this.game.add.sprite(0, 0, 'lose');
+    // this.game.world.bringToTop(message_layer);
     message_layer.width = this.game.width;
     message_layer.height = this.game.height;
     message_layer.fixedToCamera = true;

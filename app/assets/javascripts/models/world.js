@@ -27,16 +27,30 @@ World.prototype.setFullscreen = function(game) {
 };
 
 
-function rainRedOrbs (cameraPosition) {
-  for (var i = 0; i < Math.floor(Math.random()*10+5); i++) {
-    var redOrb = redOrbs.create(game.world.randomX, 0, 'redOrb');
-    redOrb.body.gravity.y = 100;
-    redOrb.body.bounce.y = 0.7 + Math.random() * 0.2;
-    redOrb.lifespan = 10000;
+function rainRedOrbs (levelNum, color) {
+  var gravity, bounce, lifespan, color, numOfOrbs;
+  if (levelNum === 0) {
+    gravity = 100;
+    bounce = 0.7;
+    lifespan = 10000;
+    color = 'redOrb';
+    numOfOrbs = 10;
+  } // else if (levelNum === 1) {
+  //   gravity = 100
+  //   bounce = 0.7
+  //   lifespan = 15000
+  //   color = 'redOrb'
+  // }
+  for (var i = 0; i < Math.floor(Math.random()*numOfOrbs+5); i++) {
+    var redOrb = redOrbs.create(game.world.randomX, 0, color);
+    redOrb.body.gravity.y = gravity;
+    redOrb.body.bounce.y = bounce + Math.random() * 0.2;
+    redOrb.lifespan = lifespan;
   }
 }
 
 function rainOrbs () {
+
   for (var i = 0; i < Math.floor(Math.random()*10+5); i++) {
     var orb = orbs.create(game.world.randomX, 0, 'blueOrb');
     orb.body.gravity.y = 100;
@@ -44,6 +58,11 @@ function rainOrbs () {
     orb.lifespan = 10000;
   }
 }
+
+
+// function changeOrbs () {
+
+// }
 
 // function rainStar () {
 //   var star = stars.create(game.world.randomX, 0, 'star');

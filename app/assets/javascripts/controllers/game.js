@@ -13,6 +13,9 @@ function GameController() {
   this.healthbar;
   this.endGame;
   this.ledge;
+  this.background;
+  this.hitBox;
+  this.level;
 }
 
 GameController.prototype.run = function() {
@@ -22,6 +25,7 @@ GameController.prototype.run = function() {
 
 GameController.prototype.preload = function() {
   game.load.image('space', 'assets/space.jpg');
+  game.load.image('levelTwo', 'assets/wormhole.jpg');
   game.load.image('cloud', 'assets/cloud-sprite.png');
   game.load.image('redOrb', 'assets/unsafe_orb.png');
   game.load.image('heart', 'assets/heart-sprite.png')
@@ -32,7 +36,7 @@ GameController.prototype.preload = function() {
 }
 
 GameController.prototype.create = function() {
-
+  this.level = 0;
   // CREATE THE WORLD
   world = new World();
   world.setCanvas(game, 0, 0, 1280, 600);
@@ -42,7 +46,7 @@ GameController.prototype.create = function() {
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-  var sky = game.add.sprite(0, 0, 'space');
+  this.background = game.add.sprite(0, 0, 'space');
   // sky.scale.setTo(10,1);
 
   platforms = game.add.group();
@@ -98,7 +102,7 @@ GameController.prototype.create = function() {
   // Falling redOrbs
   redOrbs = game.add.group();
   redOrbs.enableBody = true;
-  game.time.events.loop(Phaser.Timer.SECOND * 5, rainRedOrbs, game);
+  game.time.events.loop(Phaser.Timer.SECOND * 5, rainRedOrbs(0, 'redOrb'), game);
 
   // CREATE BLUE ORBS
   orbs = game.add.group();
@@ -166,6 +170,7 @@ GameController.prototype.update = function() {
     asteria.health -= 1
     healthbar.children.pop();
     hitBox = game.add.sprite( 0, 0, 'hitBox')
+    game.world.bringToTop(hitBox);
     hitBox.width = game.width;
     hitBox.height = game.height;
     hitBox.fixedToCamera = true;
@@ -179,7 +184,6 @@ GameController.prototype.update = function() {
 
   // Movement Conditions //
 
-  endGame.setConditions(score);
   game.physics.arcade.overlap(player, orbs, collectOrbs, null, this);
 
   // function collisionHandler (obj1, obj2) {
@@ -215,6 +219,24 @@ GameController.prototype.update = function() {
   } else if (cursors.down.isDown && player.body.touching.down) {
       asteria.crouch();
   }
+
+  // next level stuff
+  if (score > 20 && this.level === 0) {
+    this.level += 1;
+    this.background.kill();
+    this.background = game.add.sprite(0, 0, 'levelTwo');
+    game.world.moveDown(this.background);
+    game.world.bringToTop(player);
+    game.world.bringToTop(orbs);
+    game.world.bringToTop(redOrbs);
+    game.world.bringToTop(healthbar);
+    game.world.bringToTop(scoreText);
+    game.time.events.stop();
+    game.time.events.loop(Phaser.Timer.SECOND * 5, rainRedOrbs(1, 'redOrb'), game);
+  }
+
+  // end game score sending call
+  endGame.setConditions(score);
 }
 
 GameController.prototype.render = function() {
