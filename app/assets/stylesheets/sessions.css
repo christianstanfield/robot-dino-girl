@@ -2,10 +2,13 @@
   margin: 0 auto;
   text-align: center;
   border: 2px solid black;
-  width: 300px;
   padding-bottom: 30px;
   margin-top: 75px;
   border-radius: 10px;
+}
+
+#login {
+  width: 350px;
 }
 
 .login input {
@@ -32,4 +35,10 @@
 }
 .flash {
   color: red;
+}
+
+.screen {
+  position: relative;
+  height: 100%;
+  width: 100%;
 }

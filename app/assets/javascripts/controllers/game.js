@@ -215,6 +215,8 @@ GameController.prototype.update = function() {
   } else if (cursors.down.isDown && player.body.touching.down) {
       asteria.crouch();
   }
+
+  
 }
 
 GameController.prototype.render = function() {
