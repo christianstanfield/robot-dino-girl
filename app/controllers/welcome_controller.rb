@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
-  def index
-
+  def lvl2
+    render :second_level_view
   end
 end

@@ -24,4 +24,12 @@ $( document ).ready(function() {
     $('#login').show();
   });
 
+  // START LEVEL TWO LOGIC
+
+  var lvlTwoController = new LevelTwoController();
+  $('#level_two').on('click', function(){
+    $('#levelTwoDiv').html('<div></div>');
+    lvlTwoController.run();
+  });
+
 });

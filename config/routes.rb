@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get 'game_reports' => 'game_reports#create'
   post 'level_reports' => 'level_reports#create'
 
-
+  get 'lvl2' => 'welcome#lvl2'
   # get 'game' => 'game#show'
 
   # Example of regular route:

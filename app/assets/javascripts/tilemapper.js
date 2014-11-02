@@ -15,6 +15,7 @@ TileMapper.prototype.createTiles = function(mapName, tileImageName, tileSheetNam
   this.map = this.game.add.tilemap(mapName, 30, 30);
   this.map.addTilesetImage(tileImageName, tileSheetName, 31, 31);
   this.layer = this.map.createLayer(0);
+  this.layer.resizeWorld();
   for (i = 0; i < collisionRanges.length; i++) {
     this.map.setCollisionBetween(collisionRanges[i][0],collisionRanges[i][1]);
   }

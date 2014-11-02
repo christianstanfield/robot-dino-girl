@@ -5,7 +5,6 @@ class LevelReportsController < ApplicationController
     @user = current_user
     @game_report = @user.game_reports.last
     @game_report.level_reports.create!(points: score)
-    # html_game_points = render partial: 'games/show_game_stats', formats: :html
     html_game_points = "<li>"
     html_game_points += "<h2>Game #{current_user.game_reports.count}</h2>"
     @game_report.level_reports.each_with_index do |level_report, index|
