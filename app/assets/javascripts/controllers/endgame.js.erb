@@ -4,7 +4,7 @@ var EndGame = function(game){
 
 EndGame.prototype.loadAssets = function() {
   // Loading images for losing and winning screens
-  this.game.load.image('gameover', 'assets/game_over.png');
+  this.game.load.image('gameover', '<%= asset_path "game_over.png" %>');
 }
 
 // EndGame.prototype.setConditions = function(score){

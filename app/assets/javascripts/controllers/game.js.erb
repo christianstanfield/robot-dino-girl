@@ -21,13 +21,13 @@ GameController.prototype.run = function() {
 }
 
 GameController.prototype.preload = function() {
-  game.load.image('space', 'assets/space.jpg');
-  game.load.image('cloud', 'assets/cloud-sprite.png');
-  game.load.image('redOrb', 'assets/unsafe_orb.png');
-  game.load.image('heart', 'assets/heart-sprite.png')
-  game.load.image('blueOrb', 'assets/safe_orb.png');
-  game.load.image('hitBox', 'assets/red.jpg');
-  game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+  game.load.image('space', '<%= asset_path "space.jpg" %>');
+  game.load.image('cloud', '<%= asset_path "cloud-sprite.png" %>');
+  game.load.image('redOrb', '<%= asset_path "unsafe_orb.png" %>');
+  game.load.image('heart', '<%= asset_path "heart-sprite.png" %>');
+  game.load.image('blueOrb', '<%= asset_path "safe_orb.png" %>');
+  game.load.image('hitBox', '<%= asset_path "red.jpg" %>');
+  game.load.spritesheet('dude', '<%= asset_path "dude.png" %>', 32, 48);
   endGame.loadAssets();
 }
 
@@ -216,7 +216,7 @@ GameController.prototype.update = function() {
       asteria.crouch();
   }
 
-  
+
 }
 
 GameController.prototype.render = function() {
