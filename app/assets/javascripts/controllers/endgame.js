@@ -48,6 +48,7 @@ EndGame.prototype.setConditions = function(score){
   // Set WIN condition in the IF CONDITIONAL
   if (player.position.y > 600 || player.alive === false) {
     this.game.paused = true;
+    // game.scale.stopFullScreen();
     var phaserGame = this.game;
     var message_layer = phaserGame.add.sprite(0, 0, 'gameover');
     message_layer.width = phaserGame.width;
@@ -71,7 +72,6 @@ EndGame.prototype.setConditions = function(score){
       $('#game-fullscreen').hide();
       $('#start-game-link').show();
     });
-
 
   };
 

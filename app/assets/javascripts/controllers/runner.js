@@ -1,14 +1,7 @@
 $( document ).ready(function() {
-  var gameController = new GameController();
-  $('#start-game-link').on('click', function(){
-    $('#gameDiv').html('<div></div>');
-    gameController.run();
-    $(this).hide();
-    $('#game-fullscreen').show();
-    $.get('/game_reports', function(serverResponse, status, jqXHR) {
-      // Do things with serverResponse here
-    });
-  });
+
+
+  $('#start-game-link').on('click', startGame);
 
   $('#game-fullscreen').on('click', function(){
     world.setFullscreen(game);
@@ -25,3 +18,14 @@ $( document ).ready(function() {
   });
 
 });
+
+function startGame() {
+  var gameController = new GameController();
+  $('#gameDiv').html('<div></div>');
+  gameController.run();
+  $('#start-game-link').hide();
+  $('#game-fullscreen').show();
+  $.get('/game_reports', function(serverResponse, status, jqXHR) {
+    // Do things with serverResponse here
+  });
+}

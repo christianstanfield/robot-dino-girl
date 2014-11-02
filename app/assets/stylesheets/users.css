@@ -1,3 +1,7 @@
 #game-fullscreen {
   display: none;
 }
+
+#create_account {
+  width: 300px;
+}
