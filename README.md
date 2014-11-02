@@ -4,7 +4,7 @@ Welcome to Asteria!
 
 Asteria is a game written in javascript using [Phaser](http://phaser.io) with a rails backend. 
 
-![Asteria Screenshot](/screenshot.jpg)
+![Asteria Screenshot](screenshot.png)
 
 == How to Play
 
