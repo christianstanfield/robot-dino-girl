@@ -64,7 +64,7 @@ GameController.prototype.create = function() {
   player = asteria.sprite;
 
   // Initializing asteria's healthbar //
- 
+
   // player.maxHealth = 5
   // player.health = 5
 
@@ -114,7 +114,6 @@ GameController.prototype.create = function() {
 
 GameController.prototype.update = function() {
 
-  endGame.setConditions(score);
 
 
   //  Collide the player and the redOrbs with the platforms
@@ -173,6 +172,7 @@ GameController.prototype.update = function() {
 
   // Movement Conditions //
 
+  endGame.setConditions(score);
   game.physics.arcade.overlap(player, orbs, collectOrbs, null, this);
 
   // function collisionHandler (obj1, obj2) {

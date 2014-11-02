@@ -1,7 +1,6 @@
 class SessionsController < ApplicationController
   def new
     @user = User.new
-    puts "HELLO"
   end
 
   def create

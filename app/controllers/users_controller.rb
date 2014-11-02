@@ -1,12 +1,20 @@
 class UsersController < ApplicationController
   def create
     puts "CREATE"
-    user = User.create(user_params)
+    user = User.new(user_params)
+    puts user.valid?
+    puts user.errors
     if user.valid?
-      redirect_to root_url, :notice => "Signed up!"
+      user.save
+      session[:user_id] = user.id
+      @game_reports = current_user.game_reports
+      @level_reports = current_user.level_reports
+      @high_score = current_user.get_high_score
+      render :"users/show"
+      # redirect_to "/users/#{user.id}"
     else
       @user = user
-      render "sessions/new"
+      redirect_to root_url
     end
   end
 

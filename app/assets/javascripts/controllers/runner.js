@@ -5,6 +5,9 @@ $( document ).ready(function() {
     gameController.run();
     $(this).hide();
     $('#game-fullscreen').show();
+    $.get('/game_reports', function(serverResponse, status, jqXHR) {
+      // Do things with serverResponse here
+    });
   });
 
   $('#game-fullscreen').on('click', function(){
@@ -19,6 +22,6 @@ $( document ).ready(function() {
   $('#return_login').on('click', function(){
     $('#create_account').hide();
     $('#login').show();
-  });  
+  });
 
 });
