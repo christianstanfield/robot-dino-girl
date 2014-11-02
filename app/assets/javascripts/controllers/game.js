@@ -1,4 +1,22 @@
+
+
+
+//joining a room// (i.e. enter game)
+// io.on('connection', function(socket){
+//   socket.join('some room');
+// });
+
+// io.to('some room').emit('some event'):
+
+// //leaving a room // (i.e. leaving a game)
+
+// io.on('disconnection', function(socket){
+//   socket.leave('some room');
+// });
+
+
 function GameController() {
+  this.socket;
   this.player;
   this.platforms;
   this.cursors;
@@ -26,12 +44,14 @@ GameController.prototype.preload = function() {
   game.load.image('redOrb', 'assets/unsafe_orb.png');
   game.load.image('diamond', 'assets/diamond.png')
   game.load.image('blueOrb', 'assets/safe_orb.png');
+  game.load.spritesheet('enemy', 'assets/dude.png');
   game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
   endGame.loadAssets();
 }
 
 GameController.prototype.create = function() {
 
+  socket = io.connect("http://localhost", {port: 3000, transports: ["websocket"]});
   // CREATE THE WORLD
   world = new World();
   world.setCanvas(game, 0, 0, 1600, 600);
@@ -62,7 +82,7 @@ GameController.prototype.create = function() {
   player = asteria.sprite;
 
   // Initializing asteria's healthbar //
- 
+
   // player.maxHealth = 5
   // player.health = 5
 
@@ -108,6 +128,7 @@ GameController.prototype.create = function() {
   scoreText = game.add.text(16, 16, 'Score: ' + score, { fontSize: '32px', fill: '#000' });
   scoreText.fixedToCamera = true;
 
+  setEventHandlers();
 }
 
 GameController.prototype.update = function() {
@@ -133,13 +154,13 @@ GameController.prototype.update = function() {
   // }
 
   // orbs.children.forEach(killDeadOrbs);
-  
+
   ledge.alpha = ledge.lifespan / 10000;
-  
+
   redOrbs.forEachAlive(function(orb){
     orb.alpha = orb.lifespan / 10000;
-  }); 
-  
+  });
+
   orbs.forEachAlive(function(orb){
     orb.alpha = orb.lifespan / 10000;
   });
