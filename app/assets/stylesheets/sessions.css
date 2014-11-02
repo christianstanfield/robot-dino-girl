@@ -25,3 +25,8 @@
 #create_account {
   display: none;
 }
+
+.error {
+  text-align: center;
+  color: red;
+}

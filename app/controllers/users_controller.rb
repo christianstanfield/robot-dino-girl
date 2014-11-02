@@ -1,4 +1,8 @@
 class UsersController < ApplicationController
+  def new
+    @user = User.new
+  end
+
   def create
     puts "CREATE"
     user = User.new(user_params)
@@ -15,7 +19,9 @@ class UsersController < ApplicationController
       # redirect_to "/users/#{user.id}"
     else
       @user = user
-      redirect_to root_url
+      @error = "Invalid email or password confirmation"
+      render :new
+      # redirect_to root_url
     end
   end
 
