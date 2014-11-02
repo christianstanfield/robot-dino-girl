@@ -18,10 +18,11 @@ class UsersController < ApplicationController
       render :"users/show"
       # redirect_to "/users/#{user.id}"
     else
+      # flash.now.alert = "Invalid email or password!"
       @user = user
       @error = "Invalid email or password confirmation"
       render :new
-      # redirect_to root_url
+      # redirect_to root_url#, :notice => "Invalid, try again!"
     end
   end
 

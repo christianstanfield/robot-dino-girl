@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     user = User.find_by_username(params[:username])
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to root_url, :notice => "You logged in!"
+      redirect_to root_url#, :notice => "You logged in!"
     else
       @error = "Invalid email or password!"
       @user = User.new
@@ -17,6 +17,6 @@ class SessionsController < ApplicationController
 
   def destroy
     session.delete(:user_id)
-    redirect_to root_url
+    redirect_to sessions_new_url
   end
 end

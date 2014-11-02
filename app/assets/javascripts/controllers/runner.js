@@ -14,12 +14,12 @@ $( document ).ready(function() {
     world.setFullscreen(game);
   });
 
-  $('body').on('click', '#new_account', function(){
+  $(document).on('click', '#new_account', function(){
     $('#login').hide();
     $('#create_account').show();
   });
 
-  $('body').on('click', '#return_login', function(){
+  $(document).on('click', '#return_login', function(){
     $('#create_account').hide();
     $('#login').show();
   });
