@@ -1,8 +1,14 @@
 <div class="login" id="login">
   <h1>Log in</h1>
+
+  <% flash.each do |key, value| %>
+    <div class="flash <%= key %>"><%= value %></div>
+  <% end %>
+  <% flash.clear %>
+
   <%= form_tag sessions_path do %>
-    <%= text_field_tag :username, params[:username], placeholder: "Username" %> <br>
-    <%= password_field_tag :password, params[:password], placeholder: "Password" %> <br>
+    <%= text_field_tag :username, params[:username], placeholder: "Username", value: @user.username %> <br>
+    <%= password_field_tag :password, params[:password], placeholder: "Password", value: '' %> <br>
     <%= submit_tag "Login" %>
   <% end %>
   <button id="new_account">Create an Account</button>

@@ -14,8 +14,9 @@ class UsersController < ApplicationController
       render :"users/show"
       # redirect_to "/users/#{user.id}"
     else
+      flash.now.alert = "Invalid email or password!"
       @user = user
-      redirect_to root_url
+      redirect_to root_url#, :notice => "Invalid, try again!"
     end
   end
 
