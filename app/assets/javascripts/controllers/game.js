@@ -26,6 +26,7 @@ GameController.prototype.preload = function() {
   game.load.image('redOrb', 'assets/unsafe_orb.png');
   game.load.image('heart', 'assets/heart-sprite.png')
   game.load.image('blueOrb', 'assets/safe_orb.png');
+  game.load.image('hitBox', 'assets/red.jpg');
   game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
   endGame.loadAssets();
 }
@@ -134,13 +135,13 @@ GameController.prototype.update = function() {
   // }
 
   // orbs.children.forEach(killDeadOrbs);
-  
+
   ledge.alpha = ledge.lifespan / 10000;
-  
+
   redOrbs.forEachAlive(function(orb){
     orb.alpha = orb.lifespan / 10000;
-  }); 
-  
+  });
+
   orbs.forEachAlive(function(orb){
     orb.alpha = orb.lifespan / 10000;
   });
@@ -164,6 +165,12 @@ GameController.prototype.update = function() {
     }
     asteria.health -= 1
     healthbar.children.pop();
+    hitBox = game.add.sprite( 0, 0, 'hitBox')
+    hitBox.width = game.width;
+    hitBox.height = game.height;
+    hitBox.fixedToCamera = true;
+    hitBox.lifespan = 70
+    hitBox.alpha = 0.7
   }
 
   game.physics.arcade.overlap(player, redOrbs, loseHealth, null, game);
