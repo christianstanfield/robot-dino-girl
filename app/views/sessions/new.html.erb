@@ -1,27 +1,14 @@
+
 <div class="login" id="login">
   <h1>Log in</h1>
-
-  <% flash.each do |key, value| %>
-    <div class="flash <%= key %>"><%= value %></div>
-  <% end %>
-  <% flash.clear %>
+  <p class="error"><%= @error %></p>
 
   <%= form_tag sessions_path do %>
     <%= text_field_tag :username, params[:username], placeholder: "Username", value: @user.username %> <br>
     <%= password_field_tag :password, params[:password], placeholder: "Password", value: '' %> <br>
     <%= submit_tag "Login" %>
   <% end %>
-  <button id="new_account">Create an Account</button>
+  <%= link_to('Create an Account', '/users/new') %>
+  <!-- <button id="new_account">Create an Account</button> -->
 </div>
 
-<div class="login" id="create_account">
-  <h1>Create Account</h1>
-  <%= form_for @user do |f| %>
-    <%= f.text_field :username, placeholder: "Username" %>
-    <%= f.text_field :email, placeholder: "Email" %>
-    <%= f.password_field :password, placeholder: "Password" %>
-    <%= f.password_field :password_confirmation, placeholder: "Enter password again" %> <br>
-    <%= f.submit "Create Account" %> <br>
-  <button id="return_login">Back to Login</button>
-  <% end %>
-</div>

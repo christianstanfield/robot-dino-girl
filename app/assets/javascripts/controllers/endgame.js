@@ -4,8 +4,7 @@ var EndGame = function(game){
 
 EndGame.prototype.loadAssets = function() {
   // Loading images for losing and winning screens
-  this.game.load.image('win', 'assets/YouWin.png');
-  this.game.load.image('lose', 'assets/YouLose.jpg');
+  this.game.load.image('gameover', 'assets/game_over.png');
 }
 
 // EndGame.prototype.setConditions = function(score){
@@ -49,14 +48,13 @@ EndGame.prototype.setConditions = function(score){
   // Set WIN condition in the IF CONDITIONAL
   if (player.position.y > 600 || player.alive === false) {
     this.game.paused = true;
-
     var phaserGame = this.game;
-    var message_layer = phaserGame.add.sprite(0, 0, 'lose');
+    var message_layer = phaserGame.add.sprite(0, 0, 'gameover');
     message_layer.width = phaserGame.width;
     message_layer.height = phaserGame.height;
     message_layer.fixedToCamera = true;
     message_layer.alpha = 0.5;
-    var message_layer_text = phaserGame.add.text(phaserGame.width/2, phaserGame.height/2+20, '', { fontSize: '32px', fill: '#F00' })
+    var message_layer_text = phaserGame.add.text(phaserGame.width/2-100, phaserGame.height/2-250, '', { fontSize: '32px', fill: '#F00' })
     message_layer_text.fixedToCamera = true;
     $.post('/level_reports', { 'score': score }, function(serverResponse, status, jqXHR) {
       var highScore = serverResponse.highScore;

@@ -21,11 +21,15 @@
 .login button {
   margin: 5px;
 }*/
-
+/*
 #create_account {
   display: none;
-}
+}*/
 
+.error {
+  text-align: center;
+  color: red;
+}
 .flash {
   color: red;
 }

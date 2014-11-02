@@ -1,1 +1,13 @@
-<h1>Create an account</h1>
+<div class="login" id="create_account">
+  <h1>Create Account</h1>
+  <p class="error"><%= @error %></p>
+  <%= form_for @user do |f| %>
+    <%= f.text_field :username, placeholder: "Username" %>
+    <%= f.text_field :email, placeholder: "Email" %>
+    <%= f.password_field :password, placeholder: "Password" %>
+    <%= f.password_field :password_confirmation, placeholder: "Enter password again" %> <br>
+    <%= f.submit "Create Account" %> <br>
+  <% end %>
+  <!-- <button id="return_login">Back to Login</button> -->
+  <%= link_to('Back to Login', '/sessions/new') %>
+</div>
