@@ -1,20 +1,8 @@
-  <li>
-    <h2>Game <%= current_user.game_reports.count %></h2>
-    <% @game_report.level_reports.each_with_index do |level_report, index| %>
-      <ul>
-        <li>Points: <%= level_report.points %></li>
-        <%if level_report.completion_time > 0 %>
-          <li>Completion time: <%= level_report.completion_time %></li>
-        <% end %>
-        <%if level_report.enemies_killed > 0 %>
-          <li>Enemies killed: <%= level_report.enemies_killed %></li>
-        <% end %>
-        <%if level_report.orbs_collected > 0 %>
-          <li>Orbs collected: <%= level_report.orbs_collected %></li>
-        <% end %>
-        <%if level_report.relics_collected > 0 %>
-          <li>Relics collected: <%= level_report.relics_collected %></li>
-        <% end %>
-      </ul>
-    <% end %>
-  </li>
+<li>
+  <h2>Game <%= current_user.game_reports.count %></h2>
+  <% @game_report.level_reports.each_with_index do |level_report, index| %>
+    <ul>
+      <li>Points: <%= level_report.points %></li>
+    </ul>
+  <% end %>
+</li>
