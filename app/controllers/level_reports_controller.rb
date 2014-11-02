@@ -5,14 +5,20 @@ class LevelReportsController < ApplicationController
     @user = current_user
     @game_report = @user.game_reports.last
     @game_report.level_reports.create!(points: score)
-    # s = render partial: 'games/show_game_stats', formats: :html
-    s = "<li>"
-    s += "<h2>Game #{current_user.game_reports.count}</h2>"
+    # html_game_points = render partial: 'games/show_game_stats', formats: :html
+    html_game_points = "<li>"
+    html_game_points += "<h2>Game #{current_user.game_reports.count}</h2>"
     @game_report.level_reports.each_with_index do |level_report, index|
-      s += "<ul><li>Points: #{level_report.points}</li></ul>"
+      html_game_points += "<ul><li>Points: #{level_report.points}</li></ul>"
     end
-    s += "</li>"
-    render json: {highScore: @user.get_high_score, htmlString: s}
+    html_game_points += "</li>"
+    html_top_ten = ""
+    User.get_top_ten.each do |username, score|
+      html_top_ten += "<li>#{username}: #{score}</li>"
+    end
+    render json: {highScore: @user.get_high_score,
+                  topTenScores: html_top_ten,
+                  htmlString: html_game_points}
   end
 
 end

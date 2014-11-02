@@ -2,6 +2,14 @@
 <button id="start-game-link">Start a new game!!!</button>
 <button id="game-fullscreen">Go Fullscreen!</button>
 <div id='gameDiv'></div>
+<div id='leaderboard'>
+  <h1>Top scores</h1>
+  <ol id='top-ten'>
+  <% @top_ten_scores.each do |username, score| %>
+    <li><%= username %>: <%= score %></li>
+  <% end %>
+  </ol>
+</div>
 <h1>My stats</h1>
 <div id="stats">
 <h2 id="high-score">High score: <%= @high_score %></h2>

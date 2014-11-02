@@ -10,6 +10,7 @@ class UsersController < ApplicationController
       @game_reports = current_user.game_reports
       @level_reports = current_user.level_reports
       @high_score = current_user.get_high_score
+      @top_ten_scores = User.get_top_ten
       render :"users/show"
       # redirect_to "/users/#{user.id}"
     else
@@ -23,6 +24,7 @@ class UsersController < ApplicationController
       @game_reports = current_user.game_reports
       @level_reports = current_user.level_reports
       @high_score = current_user.get_high_score
+      @top_ten_scores = User.get_top_ten
     else
       redirect_to sessions_new_path
     end
