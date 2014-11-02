@@ -17,7 +17,7 @@ var Websockets = function(){
     // });
   };
 
-  var setEventHandlers = function() {
+  var setEventHandlers = function(socket) {
     // Socket connection successful
     socket.on("connect", onSocketConnected);
     // Socket disconnection
@@ -28,6 +28,53 @@ var Websockets = function(){
     socket.on("move player", onMovePlayer);
     // Player removed message received
     socket.on("remove player", onRemovePlayer);
+  };
+
+
+  function onSocketConnected() {
+    console.log("Connected to socket server");
+    // Send local player data to the game server
+    socket.emit("new player", {x: player.x, y:player.y});
+  };
+
+  // Socket disconnected
+  function onSocketDisconnect() {
+      console.log("Disconnected from socket server");
+  };
+
+  // New player
+  function onNewPlayer(data) {
+      console.log("New player connected: "+data.id);
+      // Add new player to the remote players array
+      enemies.push(new RemotePlayer(data.id, game, player, data.x, data.y));
+  };
+
+  // Move player
+  function onMovePlayer(data) {
+
+      var movePlayer = playerById(data.id);
+      // Player not found
+      if (!movePlayer) {
+          console.log("Player not found: "+data.id);
+          return;
+      };
+      // Update player position
+      movePlayer.player.x = data.x;
+      movePlayer.player.y = data.y;
+
+  };
+
+  // Remove player
+  function onRemovePlayer(data) {
+      var removePlayer = playerById(data.id);
+      // Player not found
+      if (!removePlayer) {
+          console.log("Player not found: "+data.id);
+          return;
+      };
+      removePlayer.player.kill();
+      // Remove player from array
+      enemies.splice(enemies.indexOf(removePlayer), 1);
   };
 }
 

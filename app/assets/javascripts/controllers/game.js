@@ -128,7 +128,7 @@ GameController.prototype.create = function() {
   scoreText = game.add.text(16, 16, 'Score: ' + score, { fontSize: '32px', fill: '#000' });
   scoreText.fixedToCamera = true;
 
-  setEventHandlers();
+  setEventHandlers(socket);
 }
 
 GameController.prototype.update = function() {
