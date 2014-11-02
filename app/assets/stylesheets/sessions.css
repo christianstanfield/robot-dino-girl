@@ -1,6 +1,6 @@
 .login {
   margin: 0 auto;
-  text-align: center;  
+  text-align: center;
   border: 2px solid black;
   width: 300px;
   padding-bottom: 30px;
@@ -24,4 +24,8 @@
 
 #create_account {
   display: none;
+}
+
+.flash {
+  color: red;
 }
