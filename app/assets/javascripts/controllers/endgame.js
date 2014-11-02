@@ -39,5 +39,6 @@ EndGame.prototype.sendStats = function(score){
   $.post(urlTwo, data, function(serverResponse, status, jqXHR) {
     $('#stats ul').first().prepend(serverResponse.htmlString);
     $('#high-score').text("High score: " + serverResponse.highScore)
+    $('#top-ten').html(serverResponse.topTenScores)
   });
 }

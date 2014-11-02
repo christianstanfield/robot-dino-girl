@@ -19,4 +19,16 @@ class User < ActiveRecord::Base
     end
     return high_score
   end
+
+  def self.get_all_high_scores
+    all_high_scores = {}
+    self.all.each do |user|
+      all_high_scores[user.username] = user.get_high_score
+    end
+    all_high_scores.sort_by {|_key, value| -value}
+  end
+
+  def self.get_top_ten
+    self.get_all_high_scores.take(10)
+  end
 end
