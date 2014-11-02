@@ -8,37 +8,74 @@ EndGame.prototype.loadAssets = function() {
   this.game.load.image('lose', 'assets/YouLose.jpg');
 }
 
+// EndGame.prototype.setConditions = function(score){
+//   // Set WIN condition in the IF CONDITIONAL
+//   if (player.position.y > 600 || player.alive === false) {
+//     this.game.paused = true;
+//     high_score = this.sendStats(score);
+//     message_layer = this.game.add.sprite(0, 0, 'lose');
+//     message_layer.width = this.game.width;
+//     message_layer.height = this.game.height;
+//     message_layer.fixedToCamera = true;
+//     message_layer.alpha = 0.5;
+//     message_layer_text = this.game.add.text(this.game.width/2, this.game.height/2+20, 'Your score: '+score+'\n'+$('#high-score').text(), { fontSize: '32px', fill: '#F00' })
+//     message_layer_text.fixedToCamera = true;
+//     $('#game-fullscreen').hide();
+//     $('#start-game-link').show();
+//   };
+
+//   // Set LOSE condition in the IF CONDITIONAL
+//     // if (player.position.x >= 600) {
+//     //   game.paused = true
+//     //   game.add.sprite(0, 0, 'lose')
+//     // };
+// }
+
+// EndGame.prototype.sendStats = function(score){
+//   var urlOne = '/game_reports',
+//       urlTwo = '/level_reports',
+//       data = { 'score': score };
+
+//   highScore = $.post(urlTwo, data, function(serverResponse, status, jqXHR) {
+//     $('#stats ul').first().prepend(serverResponse.htmlString);
+//     $('#high-score').text("High score: " + serverResponse.highScore);
+//     $('#top-ten').html(serverResponse.topTenScores);
+//     return serverResponse.highScore
+//   });
+//   console.log(highScore);
+// }
+
 EndGame.prototype.setConditions = function(score){
   // Set WIN condition in the IF CONDITIONAL
   if (player.position.y > 600 || player.alive === false) {
     this.game.paused = true;
-    high_score = this.sendStats(score);
-    message_layer = this.game.add.sprite(0, 0, 'lose');
-    message_layer.width = this.game.width;
-    message_layer.height = this.game.height;
+
+    var phaserGame = this.game;
+    var message_layer = phaserGame.add.sprite(0, 0, 'lose');
+    message_layer.width = phaserGame.width;
+    message_layer.height = phaserGame.height;
     message_layer.fixedToCamera = true;
     message_layer.alpha = 0.5;
-    message_layer_text = this.game.add.text(this.game.width/2, this.game.height/2+20, 'Your score: '+score+'\n'+$('#high-score').text(), { fontSize: '32px', fill: '#F00' })
+    var message_layer_text = phaserGame.add.text(phaserGame.width/2, phaserGame.height/2+20, '', { fontSize: '32px', fill: '#F00' })
     message_layer_text.fixedToCamera = true;
-    $('#game-fullscreen').hide();
-    $('#start-game-link').show();
+    $.post('/level_reports', { 'score': score }, function(serverResponse, status, jqXHR) {
+      var highScore = serverResponse.highScore;
+      if (score < highScore) {
+        message_layer_text.text = 'Your score: '+score+'\nHigh score: '+highScore;
+      }
+      else {
+        message_layer_text.text = 'Your score: '+score+'\nNew high score!!!';
+      }
+
+      $('#stats ul').first().prepend(serverResponse.htmlString);
+      $('#high-score').text("High score: " + serverResponse.highScore);
+      $('#top-ten').html(serverResponse.topTenScores);
+      $('#game-fullscreen').hide();
+      $('#start-game-link').show();
+    });
+
+
   };
 
-  // Set LOSE condition in the IF CONDITIONAL
-    // if (player.position.x >= 600) {
-    //   game.paused = true
-    //   game.add.sprite(0, 0, 'lose')
-    // };
 }
 
-EndGame.prototype.sendStats = function(score){
-  var urlOne = '/game_reports',
-      urlTwo = '/level_reports',
-      data = { 'score': score };
-
-  $.post(urlTwo, data, function(serverResponse, status, jqXHR) {
-    $('#stats ul').first().prepend(serverResponse.htmlString);
-    $('#high-score').text("High score: " + serverResponse.highScore)
-    $('#top-ten').html(serverResponse.topTenScores)
-  });
-}
