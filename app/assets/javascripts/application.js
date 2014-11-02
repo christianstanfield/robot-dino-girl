@@ -10,7 +10,11 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require modernizr.js
 //= require jquery
 //= require jquery_ujs
+//= require jquery.imagesloaded.min.js
+//= require video.dev.js
+//= require bigvideo.js
 //= require turbolinks
 //= require_tree .
