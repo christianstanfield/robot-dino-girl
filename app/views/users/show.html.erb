@@ -1,12 +1,24 @@
-<%= link_to "Log out", logout_path %>
-<button id="start-game-link">Start a new game!!!</button>
-<form id="opponent-form" class="form-inline">
-  <div class="form-group">
-    <input id="opponent-name" type="text" class="form-control" placeholder="Enter Opponent Name" autofocus />
-  </div>
-  <button id="start-2player-link" class="btn btn-primary" type="submit">Play A Friend</button>
-</form>
-<button id="game-fullscreen">Go Fullscreen!</button>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <div class="amythist navbar-brand headline medium">Asteria</div>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a id="start-game-link" href="#">Start A New Game</a></li>
+        <li><a id="start-2player-link" href="#">Play A Friend</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to "Log out", logout_path %></li>
+        <li id="game-fullscreen">Go Fullscreen!</li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
 <div id='gameDiv'></div>
 <div id='leaderboard'>
   <h1>Top scores</h1>
