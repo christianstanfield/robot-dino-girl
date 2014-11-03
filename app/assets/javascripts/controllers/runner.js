@@ -3,6 +3,7 @@ $( document ).ready(function() {
 
   $('#start-game-link').on('click', startGame);
 
+
   $('#game-fullscreen').on('click', function(){
     world.setFullscreen(game);
   });
