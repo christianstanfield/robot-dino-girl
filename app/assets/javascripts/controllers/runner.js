@@ -1,15 +1,15 @@
 $( document ).ready(function() {
 
 
-  $('li').on('click', '#start-game-link', function(event){
+  $('#start-game-link').on('click', function(event){
     event.preventDefault();
     startGame();
-  }
+  });
 
-  $('li').on('click', '#start-two-player-link', function(event){
+  $('#start-two-player-link').on('click', function(event){
     event.preventDefault();
     startTwoPlayerGame();
-  }
+  });
 
 
   $('#game-fullscreen').on('click', function(){
@@ -28,8 +28,8 @@ $( document ).ready(function() {
 
 });
 
-function startGame() {
-  var gameController = new TwoPlayerGameController();
+function startGame(){
+  var gameController = new GameController();
   $('#gameDiv').html('<div></div>');
   gameController.run();
   $('#start-game-link').hide();
@@ -43,7 +43,7 @@ function startTwoPlayerGame() {
   var gameController = new TwoPlayerGameController();
   $('#gameDiv').html('<div></div>');
   gameController.run();
-  $('#start-game-link').hide();
+  $('#start-two-player-link').hide();
   $('#game-fullscreen').show();
   $.get('/game_reports', function(serverResponse, status, jqXHR) {
     // Do things with serverResponse here
