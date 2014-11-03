@@ -1,8 +1,15 @@
 $( document ).ready(function() {
 
 
-  $('#start-game-link').on('click', startGame);
-  $('#start-two-player-link').on('click', startTwoPlayerGame);
+  $('li').on('click', '#start-game-link', function(event){
+    event.preventDefault();
+    startGame();
+  }
+
+  $('li').on('click', '#start-two-player-link', function(event){
+    event.preventDefault();
+    startTwoPlayerGame();
+  }
 
 
   $('#game-fullscreen').on('click', function(){
@@ -22,7 +29,7 @@ $( document ).ready(function() {
 });
 
 function startGame() {
-  var gameController = new GameController();
+  var gameController = new TwoPlayerGameController();
   $('#gameDiv').html('<div></div>');
   gameController.run();
   $('#start-game-link').hide();

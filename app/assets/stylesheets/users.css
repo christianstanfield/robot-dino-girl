@@ -4,6 +4,10 @@
   width: 800px;
 }
 
+#gaming-container {
+  margin-top: 20%;
+}
+
 #game-fullscreen {
   display: none;
 }
