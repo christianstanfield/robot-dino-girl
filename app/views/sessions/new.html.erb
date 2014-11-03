@@ -11,8 +11,10 @@
   <%= link_to('Create an Account', '/users/new') %>
   <!-- <button id="new_account">Create an Account</button> -->
 </div>
-
-<div class="screen" data-video="videos/space-b-roll.mp4">
-    <img src="img/bird.jpg" class="big-image" />
-    <h1 class="video-title">#1 Bird</h1>
-</div>
+<script type="text/javascript">
+$(function() {
+    var BV = new $.BigVideo();
+    BV.init();
+    BV.show("<%= request.protocol + request.host_with_port + asset_path('space-b-roll.mp4')%>");
+});
+</script>
