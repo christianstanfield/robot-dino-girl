@@ -1,5 +1,6 @@
-function GameController() {
+function TwoPlayerGameController() {
   this.player;
+  this.playerTwo;
   this.platforms;
   this.cursors;
   this.spacebar;
@@ -17,13 +18,13 @@ function GameController() {
   this.sky;
 }
 
-GameController.prototype.run = function() {
+TwoPlayerGameController.prototype.run = function() {
   game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv', { preload: this.preload, create: this.create, update: this.update, render: this.render });
   world = new World();
-  endGame = new EndGame(game);
+  endGame = new TwoPlayerEndGame(game);
 }
 
-GameController.prototype.preload = function() {
+TwoPlayerGameController.prototype.preload = function() {
   game.load.image('space', '<%= asset_path "space.jpg" %>');
   game.load.image('cloud', '<%= asset_path "cloud-sprite.png" %>');
   game.load.image('redOrb', '<%= asset_path "unsafe_orb.png" %>');
@@ -31,10 +32,12 @@ GameController.prototype.preload = function() {
   game.load.image('blueOrb', '<%= asset_path "safe_orb.png" %>');
   game.load.image('hitBox', '<%= asset_path "red.jpg" %>');
   game.load.spritesheet('dude', '<%= asset_path "dude.png" %>', 32, 48);
+  game.load.spritesheet('dude2', '<%= asset_path "dude2.png" %>', 32, 48);
+  // load second dude spritesheet for second player //
   endGame.loadAssets();
 }
 
-GameController.prototype.create = function() {
+TwoPlayerGameController.prototype.create = function() {
 
   // Create World
   world.setCanvas(game, 0, 0, 1280, 600);
@@ -44,19 +47,30 @@ GameController.prototype.create = function() {
   world.buildWorld(game);
 
   // CREATE ASTERIA
-  asteria = new Asteria(game, 450, 0);
+  asteria = new Asteria(game, 475, 0, 'dude');
   player = asteria.sprite;
   asteria.createHealthbar(game);
   game.physics.arcade.enable(player);
   asteria.entersTheScene();
   asteria.setMotions();
 
+  // CREATE Wysteria //
+  wysteria = new Asteria(game, 425, 0, 'dude2');
+  playerTwo = wysteria.sprite;
+  wysteria.createWysteriaHealthbar(game);
+  game.physics.arcade.enable(playerTwo);
+  wysteria.entersTheScene();
+  wysteria.setMotions();
+
+
   // Set the camera
   world.setCamera(game, player);
 
-  //  SET CONTROLS
+  //  SET Asteria CONTROLS
   cursors = game.input.keyboard.createCursorKeys();
   spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+  a = game.input.keyboard.addKey(Phaser.Keyboard.A);
+  d = game.input.keyboard.addKey(Phaser.Keyboard.D);
 
   game.input.keyboard.onUpCallback = function(event) {
     if ((event.keyCode == Phaser.Keyboard.DOWN) && player.body.touching.down) {
@@ -78,33 +92,29 @@ GameController.prototype.create = function() {
 
   //  CREATE SCORE
   score = 0;
-  scoreText = game.add.text(650, 16, 'Score: ' + score, { fontSize: '32px', fill: '#FFF' });
+  scoreText = game.add.text(600, 16, 'Player 1: ' + score, { fontSize: '32px', fill: '#FFF' });
   scoreText.fixedToCamera = true;
+
+  playerTwoScore = 0;
+  playerTwoScoreText = game.add.text(600, 56, 'Player 2: ' + playerTwoScore, { fontSize: '32px', fill: '#FFF' });
+  playerTwoScoreText.fixedToCamera = true;
 
 }
 
-GameController.prototype.update = function() {
+TwoPlayerGameController.prototype.update = function() {
 
 
 
   //  Collide the player and the redOrbs with the platforms
   game.physics.arcade.collide(player, platforms);
+  game.physics.arcade.collide(playerTwo, platforms);
+  game.physics.arcade.collide(player, playerTwo);
   game.physics.arcade.collide(redOrbs, platforms);
   game.physics.arcade.collide(orbs, platforms);
 
   asteria.setVelocityX(0);
+  wysteria.setVelocityX(0);
 
-  // killDeadOrbs = function(orb) {
-  //   if (orb.body.velocity.y < 1 ) {
-  //     orb.bounceCount += 1;
-  //     console.log(orb.bounceCount);
-  //   }
-  //   if (orb.bounceCount > 2) {
-  //     orb.kill();
-  //   }
-  // }
-
-  // orbs.children.forEach(killDeadOrbs);
 
   ledge.alpha = ledge.lifespan / 10000;
 
@@ -120,13 +130,23 @@ GameController.prototype.update = function() {
       redOrb.kill();
   }
 
+  playerTwoCollectRedOrb = function(playerTwo, redOrb) {
+      redOrb.kill();
+  }
+
   collectOrbs = function(player, orb) {
     orb.kill();
     //  Add and update the score
     score += 10;
-    scoreText.text = 'Score: ' + score;
+    scoreText.text = 'Player 1: ' + score;
   }
 
+  playerTwoCollectOrbs = function(playerTwo, orb) {
+    orb.kill();
+    //  Add and update the score
+    playerTwoScore += 10;
+    playerTwoScoreText.text = 'Player 2: ' + playerTwoScore;
+  }
   // Health Conditions //
 
   loseHealth = function() {
@@ -143,14 +163,30 @@ GameController.prototype.update = function() {
     hitBox.alpha = 0.7
   }
 
+  playerTwoLoseHealth = function() {
+    if (wysteria.health === 1){
+      playerTwo.kill();
+    }
+    wysteria.health -= 1
+    playerTwoHealthbar.children.pop();
+    hitBox = game.add.sprite( 0, 0, 'hitBox')
+    hitBox.width = game.width;
+    hitBox.height = game.height;
+    hitBox.fixedToCamera = true;
+    hitBox.lifespan = 70
+    hitBox.alpha = 0.7
+  }
+
   game.physics.arcade.overlap(player, redOrbs, loseHealth, null, game);
   game.physics.arcade.overlap(player, redOrbs, collectRedOrb, null, game);
-
+  game.physics.arcade.overlap(playerTwo, redOrbs, playerTwoLoseHealth, null, game);
+  game.physics.arcade.overlap(playerTwo, redOrbs, playerTwoCollectRedOrb, null, game);
 
   // Movement Conditions //
 
-  endGame.setConditions(score);
+  endGame.setConditions(score, playerTwoScore);
   game.physics.arcade.overlap(player, orbs, collectOrbs, null, this);
+  game.physics.arcade.overlap(playerTwo, orbs, playerTwoCollectOrbs, null, this);
 
   // function collisionHandler (obj1, obj2) {
   //   obj1.kill();
@@ -159,6 +195,7 @@ GameController.prototype.update = function() {
   // game.physics.arcade.collide(player, ground, collisionHandler, null, this);
   // game.physics.arcade.collide(orbs, ground, collisionHandler, null, this);
 
+//Player One Movements //
   if (cursors.left.isDown) {
     asteria.moveLeft();
   } else if (cursors.right.isDown) {
@@ -186,13 +223,24 @@ GameController.prototype.update = function() {
       asteria.crouch();
   }
 
+  //Player Two Movements //
+  if (a.isDown) {
+    wysteria.moveLeft();
+  } else if (d.isDown) {
+    wysteria.moveRight();
+  } else {
+    wysteria.standStill();
+  }
+
+  if (playerTwo.body.touching.down) {
+    wysteria.jump();
+  }
 
 }
 
-GameController.prototype.render = function() {
+TwoPlayerGameController.prototype.render = function() {
 
   // game.debug.cameraInfo(game.camera, 32, 32);
   // game.debug.spriteCoords(player, 32, 500);
   // game.debug.body(platforms.children[1]);
 }
-

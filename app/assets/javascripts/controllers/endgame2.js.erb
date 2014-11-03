@@ -1,8 +1,8 @@
-var EndGame = function(game){
+var TwoPlayerEndGame = function(game){
   this.game = game
 }
 
-EndGame.prototype.loadAssets = function() {
+TwoPlayerEndGame.prototype.loadAssets = function() {
   // Loading images for losing and winning screens
   this.game.load.image('gameover', '<%= asset_path "game_over.png" %>');
 }
@@ -44,9 +44,9 @@ EndGame.prototype.loadAssets = function() {
 //   console.log(highScore);
 // }
 
-EndGame.prototype.setConditions = function(score){
+TwoPlayerEndGame.prototype.setConditions = function(score, playerTwoScore){
   // Set WIN condition in the IF CONDITIONAL
-  if (player.position.y > 600 || player.alive === false) {
+  if ((player.position.y > 600 || player.alive === false) && (playerTwo.position.y < 600 || playerTwo.alive === false)) {
     this.game.paused = true;
     // game.scale.stopFullScreen();
     var phaserGame = this.game;
@@ -57,14 +57,9 @@ EndGame.prototype.setConditions = function(score){
     message_layer.alpha = 0.5;
     var message_layer_text = phaserGame.add.text(phaserGame.width/2-100, phaserGame.height/2-250, '', { fontSize: '32px', fill: '#F00' })
     message_layer_text.fixedToCamera = true;
-    $.post('/level_reports', { 'score': score }, function(serverResponse, status, jqXHR) {
+    $.post('/level_reports', { 'score': score, 'opponent_score': playerTwoScore, 'opponent': playerTwoName}, function(serverResponse, status, jqXHR) {
       var highScore = serverResponse.highScore;
-      if (score < highScore) {
-        message_layer_text.text = 'Your score: '+score+'\nHigh score: '+highScore;
-      }
-      else {
-        message_layer_text.text = 'Your score: '+score+'\nNew high score!!!';
-      }
+      message_layer_text.text = 'Player 1: '+score+'\nPlayer 2: '+playerTwoScore;
 
       $('#stats ul').first().prepend(serverResponse.htmlString);
       $('#high-score').text("High score: " + serverResponse.highScore);

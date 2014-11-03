@@ -1,5 +1,5 @@
-var Asteria = function(game, x, y){
-  this.sprite = game.add.sprite(x, y, 'dude');
+var Asteria = function(game, x, y, spriteName){
+  this.sprite = game.add.sprite(x, y, spriteName);
   this.maxHealth = 5;
   this.health = 5;
 };
@@ -18,6 +18,14 @@ Asteria.prototype.createHealthbar = function(game) {
     heart = healthbar.create((i * 40)+16, 16, 'heart');
   }
   healthbar.fixedToCamera = true;
+};
+
+Asteria.prototype.createWysteriaHealthbar = function(game) {
+  playerTwoHealthbar = game.add.group();
+  for (var i = 0; i < 5; i++) {
+    heart = playerTwoHealthbar.create((i * 40)+16, 56, 'heart');
+  }
+  playerTwoHealthbar.fixedToCamera = true;
 };
 
 Asteria.prototype.setMotions = function(){

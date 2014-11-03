@@ -2,9 +2,17 @@ class LevelReportsController < ApplicationController
 
   def create
     score = params[:score].to_i
+    if params[:opponent_score] && params[:opponent]
+      opponent_score = params[:opponent_score].to_i
+      opponent = params[:opponent]
+    end
     @user = current_user
     @game_report = @user.game_reports.last
     @game_report.level_reports.create!(points: score)
+    if opponent && opponent_score
+      @game_report.level_reports.update_attributes(:opponent_score = opponent_score, :opponent = opponent)
+      @game_report.level_reports.save
+    end
     # html_game_points = render partial: 'games/show_game_stats', formats: :html
     html_game_points = "<li>"
     html_game_points += "<h2>Game #{current_user.game_reports.count}</h2>"

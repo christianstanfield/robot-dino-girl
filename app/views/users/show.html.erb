@@ -1,6 +1,11 @@
 <%= link_to "Log out", logout_path %>
 <button id="start-game-link">Start a new game!!!</button>
-<button id="start-2player-link">Play A Friend!!!</button>
+<form id="opponent-form" class="form-inline">
+  <div class="form-group">
+    <input id="opponent-name" type="text" class="form-control" placeholder="Enter Opponent Name" autofocus />
+  </div>
+  <button id="start-2player-link" class="btn btn-primary" type="submit">Play A Friend</button>
+</form>
 <button id="game-fullscreen">Go Fullscreen!</button>
 <div id='gameDiv'></div>
 <div id='leaderboard'>
