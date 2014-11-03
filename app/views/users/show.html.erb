@@ -1,5 +1,4 @@
 <nav class="navbar navbar-default" role="navigation">
-  <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <div class="amythist navbar-brand headline medium">Asteria</div>
@@ -10,37 +9,35 @@
       <ul class="nav navbar-nav">
         <li><a href="#" id="start-game-link">Start A New Game</a></li>
         <li><a href="#" id="start-two-player-link">Play A Friend</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#" id="game-fullscreen">Go Fullscreen</a></li>
         <li><%= link_to "Log out", logout_path %></li>
-        <li id="game-fullscreen">Go Fullscreen!</li>
       </ul>
     </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+<!-- /.container-fluid -->
 </nav>
-<div id="gaming-container" class="container">
-  <div id='gameDiv'></div>
-  <div class="row">
-    <div id='leaderboard' class="col-md-6">
-      <div class="subheadline medium">Top scores</div>
-      <ol id='top-ten'>
-      <% @top_ten_scores.each do |username, score| %>
-        <li><%= username %>: <%= score %></li>
-      <% end %>
-      </ol>
+<div class="container" id="gaming-container">
+  <div class="row" id="game-selection">
+    <div class="col-md-12 text-center">
+      <div id="headline text-center">
+        <div class="headline sapphire text-center">Asteria</div>
+        <div class="subheadline x-large white text-center">The Brave</div><br>
+          <!-- <button class="btn btn-primary large white text-center"><a href="#" id="view-my-stats" class="white">View My Stats</button>
+          <button class="btn btn-primary large white text-center"><a href="#" class="start-game-link white">Start A New Game</a></button>
+          <button class="btn btn-primary large white text-center"><a href="#" class="start-two-player-link white">Play A Friend</a></button> -->
+      </div>
+      <div id='gameDiv'></div>
     </div>
-    <div id="stats" class="col-md-6">
-      <div class="subheadline medium">My stats</div>
-      <div id="high-score" class="subheadline medium">High score: <%= @high_score %></div>
+  </div>
+  <div class="row" id="all-stats">
+    <div id="stats" class="col-md-3 col-md-offset-3">
+      <div class="subhead medium">Last Five Games:</div>
       <ul>
         <% count = @game_reports.count %>
-          <% @game_reports.reverse.each do |game_report| %>
+          <% @game_reports.reverse.take(5).each do |game_report| %>
             <li>
-              <div class="subheadline small">Game <%= count %></div>
+              <div class="subhead small">Game <%= count %></div>
                 <% game_report.level_reports.each_with_index do |level_report, index| %>
-                  <ul>
-                    <li>Points: <%= level_report.points %></li>
-                  </ul>
+                    <div> Points: <%= level_report.points %></div>
                 <% end %>
               <% count -= 1 %>
             <% end %>
@@ -49,6 +46,18 @@
       <% if  @game_reports.count == 0 %>
         <div id="start-game-link"><a href="#">Start A New Game</a></div>
       <% end %>
+    </div>
+    <div id='leaderboard' class="col-md-3">
+      <div class="subhead medium">Top Scores:</div>
+      <ol id='top-ten'>
+      <% @top_ten_scores.each do |username, score| %>
+        <li><%= username %>: <%= score %></li>
+      <% end %>
+      </ol>
+      <div id="high-score" class="subhead medium">My Top Score:</div>
+      <ul id="top-ten">
+        <li><%= @high_score %></li>
+      </ul>
     </div>
   </div>
 </div>

@@ -14,7 +14,7 @@ function create() {
     bullets.createMultiple(50, 'bullet');
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
-    
+
     sprite = game.add.sprite(400, 300, 'arrow');
     sprite.anchor.set(0.5);
 
@@ -30,12 +30,12 @@ function update(){
 };
 
 function fire(){
-	if (game.time.now > nextFire && bullets.countDead() > 0){
+    if (game.time.now > nextFire && bullets.countDead() > 0){
         nextFire = game.time.now + fireRate;
         var bullet = bullets.getFirstDead();
         bullet.reset(sprite.x - 8, sprite.y - 8);
         game.physics.arcade.moveToPointer(bullet, 300);
-  }
+      }
 }
 
 function render(){

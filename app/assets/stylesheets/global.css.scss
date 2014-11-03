@@ -14,6 +14,13 @@ a {
   background-color: #009290;
 }
 
+.btn-primary {
+  a:hover{
+      color:white;
+      text-decoration:none;
+  }
+}
+
 .headline {
   font-family: 'Playball', cursive;
   font-size: 220px;
@@ -22,6 +29,11 @@ a {
 .subheadline {
   font-family: 'Poiret One', cursive;
   margin-top: -80px;
+  letter-spacing: 2.5px;
+}
+
+.subhead {
+  font-family: 'Poiret One', cursive;
   letter-spacing: 2.5px;
 }
 

@@ -6,13 +6,30 @@ $( document ).ready(function() {
     startGame();
   });
 
-  $('#start-two-player-link').on('click', function(event){
+   $('#start-two-player-link').on('click', function(event){
     event.preventDefault();
     startTwoPlayerGame();
   });
 
+  // $('.start-two-player-link').on('click', function(event){
+  //   event.preventDefault();
+  //   startTwoPlayerGame();
+  // });
 
-  $('#game-fullscreen').on('click', function(){
+  // $('.start-game-link').on('click' function(event){
+  //   event.preventDefault();
+  //   startGame();
+  // });
+
+
+
+  $('#view-my-stats').on('click', function(event){
+    event.preventDefault();
+    $('#all-stats').show();
+  });
+
+  $('#game-fullscreen').on('click', function(event){
+    event.preventDefault();
     world.setFullscreen(game);
   });
 
@@ -30,10 +47,14 @@ $( document ).ready(function() {
 
 function startGame(){
   var gameController = new GameController();
-  $('#gameDiv').html('<div></div>');
   gameController.run();
   $('#start-game-link').hide();
-  $('#game-fullscreen').show();
+  $('#view-my-stats').hide();
+  $('#all-stats').hide();
+  $('#headline').addClass('hide');
+  $('#game-fullscreen').removeClass('hide');
+  $('#game-fullscreen').addClass('show');
+
   $.get('/game_reports', function(serverResponse, status, jqXHR) {
     // Do things with serverResponse here
   });
@@ -41,10 +62,13 @@ function startGame(){
 
 function startTwoPlayerGame() {
   var gameController = new TwoPlayerGameController();
-  $('#gameDiv').html('<div></div>');
   gameController.run();
   $('#start-two-player-link').hide();
-  $('#game-fullscreen').show();
+  $('#view-my-stats').hide();
+  $('#headline').addClass('hide');
+  $('#all-stats').hide();
+   $('#game-fullscreen').removeClass('hide');
+  $('#game-fullscreen').addClass('show');
   $.get('/game_reports', function(serverResponse, status, jqXHR) {
     // Do things with serverResponse here
   });

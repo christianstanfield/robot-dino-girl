@@ -44,7 +44,7 @@ GameController.prototype.create = function() {
   world.buildWorld(game);
 
   // CREATE ASTERIA
-  asteria = new Asteria(game, 450, 0);
+  asteria = new Asteria(game, 450, 0, 'dude');
   player = asteria.sprite;
   asteria.createHealthbar(game);
   game.physics.arcade.enable(player);
@@ -135,12 +135,12 @@ GameController.prototype.update = function() {
     }
     asteria.health -= 1
     healthbar.children.pop();
-    hitBox = game.add.sprite( 0, 0, 'hitBox')
+    hitBox = game.add.sprite( 0, 0, 'hitBox');
     hitBox.width = game.width;
     hitBox.height = game.height;
     hitBox.fixedToCamera = true;
-    hitBox.lifespan = 70
-    hitBox.alpha = 0.7
+    hitBox.lifespan = 70;
+    hitBox.alpha = 0.7;
   }
 
   game.physics.arcade.overlap(player, redOrbs, loseHealth, null, game);
@@ -195,4 +195,3 @@ GameController.prototype.render = function() {
   // game.debug.spriteCoords(player, 32, 500);
   // game.debug.body(platforms.children[1]);
 }
-

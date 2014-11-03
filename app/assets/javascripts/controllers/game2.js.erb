@@ -12,7 +12,7 @@ function TwoPlayerGameController() {
   this.world;
   this.game;
   this.healthbar;
-  this.endGame;
+  this.endTwoPlayerGame;
   this.ledge;
   this.ground;
   this.sky;
@@ -21,7 +21,7 @@ function TwoPlayerGameController() {
 TwoPlayerGameController.prototype.run = function() {
   game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv', { preload: this.preload, create: this.create, update: this.update, render: this.render });
   world = new World();
-  endGame = new TwoPlayerEndGame(game);
+  endTwoPlayerGame = new TwoPlayerEndGame(game);
 }
 
 TwoPlayerGameController.prototype.preload = function() {
@@ -34,7 +34,7 @@ TwoPlayerGameController.prototype.preload = function() {
   game.load.spritesheet('dude', '<%= asset_path "dude.png" %>', 32, 48);
   game.load.spritesheet('dude2', '<%= asset_path "dude2.png" %>', 32, 48);
   // load second dude spritesheet for second player //
-  endGame.loadAssets();
+  endTwoPlayerGame.loadAssets();
 }
 
 TwoPlayerGameController.prototype.create = function() {
@@ -184,7 +184,7 @@ TwoPlayerGameController.prototype.update = function() {
 
   // Movement Conditions //
 
-  endGame.setConditions(score, playerTwoScore);
+  endTwoPlayerGame.setConditions(score, playerTwoScore);
   game.physics.arcade.overlap(player, orbs, collectOrbs, null, this);
   game.physics.arcade.overlap(playerTwo, orbs, playerTwoCollectOrbs, null, this);
 

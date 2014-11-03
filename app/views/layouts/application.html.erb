@@ -7,6 +7,9 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <style>
+    html{ background: url(<%= asset_path "stardust.png" %>) top left repeat;}
+  </style>
 </head>
 <body>
     <%= yield %>
