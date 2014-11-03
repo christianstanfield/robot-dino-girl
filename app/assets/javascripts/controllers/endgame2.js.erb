@@ -44,31 +44,62 @@ TwoPlayerEndGame.prototype.loadAssets = function() {
 //   console.log(highScore);
 // }
 
+// TwoPlayerEndGame.prototype.setConditions = function(score, playerTwoScore){
+//   // Set WIN condition in the IF CONDITIONAL
+//   if ((player.position.y > 600 || player.alive === false) && (playerTwo.position.y < 600 || playerTwo.alive === false)) {
+//     this.game.paused = true;
+//     // game.scale.stopFullScreen();
+//     var phaserGame = this.game;
+//     var message_layer = phaserGame.add.sprite(0, 0, 'gameover');
+//     message_layer.width = phaserGame.width;
+//     message_layer.height = phaserGame.height;
+//     message_layer.fixedToCamera = true;
+//     message_layer.alpha = 0.5;
+//     var message_layer_text = phaserGame.add.text(phaserGame.width/2-100, phaserGame.height/2-250, '', { fontSize: '32px', fill: '#F00' })
+//     message_layer_text.fixedToCamera = true;
+//     $.post('/level_reports', { 'score': score, 'opponent_score': playerTwoScore, 'opponent': playerTwoName}, function(serverResponse, status, jqXHR) {
+//       var highScore = serverResponse.highScore;
+//       message_layer_text.text = 'Player 1: '+score+'\nPlayer 2: '+playerTwoScore;
+
+//       $('#stats ul').first().prepend(serverResponse.htmlString);
+//       $('#high-score').text("High score: " + serverResponse.highScore);
+//       $('#top-ten').html(serverResponse.topTenScores);
+//       $('#game-fullscreen').hide();
+//       $('#start-game-link').show();
+//     });
+
+//   };
+
+// }
+
+
 TwoPlayerEndGame.prototype.setConditions = function(score, playerTwoScore){
   // Set WIN condition in the IF CONDITIONAL
-  if ((player.position.y > 600 || player.alive === false) && (playerTwo.position.y < 600 || playerTwo.alive === false)) {
+  if (player.position.y > 600){
     this.game.paused = true;
-    // game.scale.stopFullScreen();
-    var phaserGame = this.game;
-    var message_layer = phaserGame.add.sprite(0, 0, 'gameover');
-    message_layer.width = phaserGame.width;
-    message_layer.height = phaserGame.height;
-    message_layer.fixedToCamera = true;
-    message_layer.alpha = 0.5;
-    var message_layer_text = phaserGame.add.text(phaserGame.width/2-100, phaserGame.height/2-250, '', { fontSize: '32px', fill: '#F00' })
+    var message_layer_text = this.game.add.text(this.game.width/2-100, this.game.height/2-250, '', { fontSize: '32px', fill: '#F00' })
     message_layer_text.fixedToCamera = true;
-    $.post('/level_reports', { 'score': score, 'opponent_score': playerTwoScore, 'opponent': playerTwoName}, function(serverResponse, status, jqXHR) {
-      var highScore = serverResponse.highScore;
-      message_layer_text.text = 'Player 1: '+score+'\nPlayer 2: '+playerTwoScore;
+    message_layer_text.text = 'Player 2 wins!'
 
-      $('#stats ul').first().prepend(serverResponse.htmlString);
-      $('#high-score').text("High score: " + serverResponse.highScore);
-      $('#top-ten').html(serverResponse.topTenScores);
-      $('#game-fullscreen').hide();
-      $('#start-game-link').show();
-    });
+  } else if (player.alive === false){
+    this.game.paused = true;
+    var message_layer_text = this.game.add.text(this.game.width/2-100, this.game.height/2-250, '', { fontSize: '32px', fill: '#F00' })
+    message_layer_text.fixedToCamera = true;
+    message_layer_text.text = 'Player 2 wins!'
 
-  };
+  } else if (playerTwo.position.y > 600){
+    this.game.paused = true;
+    var message_layer_text = this.game.add.text(this.game.width/2-100, this.game.height/2-250, '', { fontSize: '32px', fill: '#F00' })
+    message_layer_text.fixedToCamera = true;
+    message_layer_text.text = 'Player 1 wins!'
+
+  } else if (playerTwo.alive === false) {
+    this.game.paused = true;
+    var message_layer_text = this.game.add.text(this.game.width/2-100, this.game.height/2-250, '', { fontSize: '32px', fill: '#F00' })
+    message_layer_text.fixedToCamera = true;
+    message_layer_text.text = 'Player 1 wins!'
+
+  }
 
 }
 
