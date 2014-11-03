@@ -12,6 +12,14 @@ Asteria.prototype.entersTheScene = function(){
   // this.sprite.outOfBoundsKill = true;
 };
 
+Asteria.prototype.createHealthbar = function(game) {
+  healthbar = game.add.group();
+  for (var i = 0; i < 5; i++) {
+    heart = healthbar.create((i * 40)+16, 16, 'heart');
+  }
+  healthbar.fixedToCamera = true;
+};
+
 Asteria.prototype.setMotions = function(){
   this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
   this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
