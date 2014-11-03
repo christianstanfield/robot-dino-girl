@@ -13,10 +13,13 @@ function GameController() {
   this.healthbar;
   this.endGame;
   this.ledge;
+  this.ground;
+  this.sky;
 }
 
 GameController.prototype.run = function() {
   game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv', { preload: this.preload, create: this.create, update: this.update, render: this.render });
+  world = new World();
   endGame = new EndGame(game);
 }
 
@@ -33,50 +36,17 @@ GameController.prototype.preload = function() {
 
 GameController.prototype.create = function() {
 
-  // CREATE THE WORLD
-  world = new World();
+  // Create World
   world.setCanvas(game, 0, 0, 1280, 600);
-
-  // Set fullscreen on mouseclick
-  game.input.onDown.add(world.setFullscreen, game);
 
   game.physics.startSystem(Phaser.Physics.ARCADE);
 
-  var sky = game.add.sprite(0, 0, 'space');
-  // sky.scale.setTo(10,1);
-
-  platforms = game.add.group();
-  //  Enable physics
-  platforms.enableBody = true;
-
-  var ground = platforms.create(0, game.world.height + 60);
-  ground.scale.setTo(100, 1);
-  // This stops it from falling away when you jump on it
-  ground.body.immovable = true;
-
-  ledge = platforms.create(400, 400, 'cloud');
-
-  ledge.body.immovable = true;
-  ledge.body.setSize(90,35);
-  ledge.lifespan = 10000;
+  world.buildWorld(game);  
 
   // CREATE ASTERIA
   asteria = new Asteria(game, 450, 0);
   player = asteria.sprite;
-
-  // Initializing asteria's healthbar //
-
-  // player.maxHealth = 5
-  // player.health = 5
-
-  healthbar = game.add.group();
-  for (var i = 0; i < 5; i++) {
-    var diamond = healthbar.create((i * 40)+16, 16, 'heart');
-  }
-
-  healthbar.fixedToCamera = true;
-
-  //  We need to enable physics on the player
+  asteria.createHealthbar(game);
   game.physics.arcade.enable(player);
   asteria.entersTheScene();
   asteria.setMotions();
