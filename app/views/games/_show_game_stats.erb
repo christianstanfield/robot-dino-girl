@@ -3,10 +3,10 @@
   <% @game_report.level_reports.each_with_index do |level_report, index| %>
     <ul>
       <% if level_report.opponent %>
-        <li>Your Score: <%= level_report.points %></li>
-        <li><%= level_report.opponent %>'s Score: <%= level_report.opponent_score %></li>
+        <li>Winner: <%= level_report.opponent %></li>
+      <% else %>
+        <li>Points: <%= level_report.points %></li>
       <% end %>
-      <li>Points: <%= level_report.points %></li>
     </ul>
   <% end %>
 </li>

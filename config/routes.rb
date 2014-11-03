@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   get 'game_reports' => 'game_reports#create'
   post 'level_reports' => 'level_reports#create'
+  post 'two_player_level_reports' => 'level_reports#twoplayer'
 
 
   # get 'game' => 'game#show'
