@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   def new
     @user = User.new
+    render layout: "login"
   end
 
   def create
@@ -21,8 +22,8 @@ class UsersController < ApplicationController
       # flash.now.alert = "Invalid email or password!"
       @user = user
       @error = "Invalid email or password confirmation"
-      render :new
-      # redirect_to root_url#, :notice => "Invalid, try again!"
+      render :new, layout: "login"
+      #redirect_to root_url#, :notice => "Invalid, try again!"
     end
   end
 

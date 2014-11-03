@@ -7,10 +7,20 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <style>
+    html {
+      background: url(<%= asset_path "space.jpg" %>) no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+  </style>
 </head>
-<body>
+<body id="login">
   <div class="container">
     <%= yield %>
   </div>
 </body>
 </html>
+

@@ -26,6 +26,24 @@ World.prototype.setFullscreen = function(game) {
   }
 };
 
+World.prototype.buildWorld = function(game) {
+  sky = game.add.sprite(0, 0, 'space');
+
+  platforms = game.add.group();
+  platforms.enableBody = true;
+
+  ground = platforms.create(0, game.world.height + 60);
+  ground.scale.setTo(100, 1);
+  // This stops it from falling away when you jump on it
+  ground.body.immovable = true;
+
+  ledge = platforms.create(400, 400, 'cloud');
+
+  ledge.body.immovable = true;
+  ledge.body.setSize(90,35);
+  ledge.lifespan = 10000;
+};
+
 
 function rainRedOrbs (cameraPosition) {
   for (var i = 0; i < Math.floor(Math.random()*10+5); i++) {

@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
   def new
     @user = User.new
+    render layout: "login"
   end
 
   def create
@@ -11,7 +12,7 @@ class SessionsController < ApplicationController
     else
       @error = "Invalid email or password!"
       @user = User.new
-      render "new"
+      render :new, layout: "login"
     end
   end
 

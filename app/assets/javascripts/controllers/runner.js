@@ -4,6 +4,7 @@ $( document ).ready(function() {
   $('#start-game-link').on('click', startGame);
   $('#start-two-player-link').on('click', startTwoPlayerGame);
 
+
   $('#game-fullscreen').on('click', function(){
     world.setFullscreen(game);
   });
