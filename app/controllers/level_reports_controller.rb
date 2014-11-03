@@ -2,17 +2,9 @@ class LevelReportsController < ApplicationController
 
   def create
     score = params[:score].to_i
-    if params[:opponent_score] && params[:opponent]
-      opponent_score = params[:opponent_score].to_i
-      opponent = params[:opponent]
-    end
     @user = current_user
     @game_report = @user.game_reports.last
     @game_report.level_reports.create!(points: score)
-    if opponent && opponent_score
-      @game_report.level_reports.update_attributes(:opponent_score = opponent_score, :opponent = opponent)
-      @game_report.level_reports.save
-    end
     # html_game_points = render partial: 'games/show_game_stats', formats: :html
     html_game_points = "<li>"
     html_game_points += "<h2>Game #{current_user.game_reports.count}</h2>"
@@ -27,6 +19,18 @@ class LevelReportsController < ApplicationController
     render json: {highScore: @user.get_high_score,
                   topTenScores: html_top_ten,
                   htmlString: html_game_points}
+  end
+
+  def twoplayer
+    if params[:winner] == '1'
+      @game_report = current_user.game_reports.last
+      @game_report.level_reports.create(opponent: "You won")
+      render partial: "games/show_game_stats", formats: :html
+    else
+      @game_report = current_user.game_reports.last
+      @game_report.level_reports.create(opponent: "You lost")
+      render partial: "games/show_game_stats", formats: :html
+    end
   end
 
 end
