@@ -2,7 +2,11 @@
   <h2>Game <%= current_user.game_reports.count %></h2>
   <% @game_report.level_reports.each_with_index do |level_report, index| %>
     <ul>
-      <li>Points: <%= level_report.points %></li>
+      <% if level_report.opponent %>
+        <li>Winner: <%= level_report.opponent %></li>
+      <% else %>
+        <li>Points: <%= level_report.points %></li>
+      <% end %>
     </ul>
   <% end %>
 </li>

@@ -21,4 +21,16 @@ class LevelReportsController < ApplicationController
                   htmlString: html_game_points}
   end
 
+  def twoplayer
+    if params[:winner] == '1'
+      @game_report = current_user.game_reports.last
+      @game_report.level_reports.create(opponent: "You won")
+      render partial: "games/show_game_stats", formats: :html
+    else
+      @game_report = current_user.game_reports.last
+      @game_report.level_reports.create(opponent: "You lost")
+      render partial: "games/show_game_stats", formats: :html
+    end
+  end
+
 end

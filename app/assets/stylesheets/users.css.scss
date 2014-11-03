@@ -1,0 +1,35 @@
+#gameDiv {
+  margin: 0 auto;
+  text-align: center;
+  width: 800px;
+}
+
+#game-fullscreen {
+  display: none;
+}
+
+#create_account {
+  width: 300px;
+}
+
+#all-stats{
+  display: block;
+  color: white;
+  border: 1px solid white;
+  border-radius: 5px;
+  margin-top: 30px;
+  padding: 25px;
+  margin: 0 auto;
+}
+
+#game-selection {
+  margin-bottom: 30px;
+}
+
+.hide {
+  display:none;
+}
+
+.show {
+  display:block;
+}

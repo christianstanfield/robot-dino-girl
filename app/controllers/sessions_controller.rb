@@ -18,6 +18,8 @@ class SessionsController < ApplicationController
 
   def destroy
     session.delete(:user_id)
-    redirect_to sessions_new_url
+    @user = User.new
+    # render :new, layout: "login"
+    redirect_to root_url
   end
 end
