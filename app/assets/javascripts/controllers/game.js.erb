@@ -149,7 +149,7 @@ GameController.prototype.update = function() {
 
   // Movement Conditions //
 
-  endGame.setConditions(score);
+  endGame.setOnePlayerWinConditions(score);
   game.physics.arcade.overlap(player, orbs, collectOrbs, null, this);
 
   // function collisionHandler (obj1, obj2) {
