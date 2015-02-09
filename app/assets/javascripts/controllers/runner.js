@@ -47,6 +47,7 @@ $( document ).ready(function() {
 
 function startGame(){
   var gameController = new GameController();
+  $('#gameDiv').html('');
   gameController.run();
   $('#start-game-link').hide();
   $('#view-my-stats').hide();
@@ -62,6 +63,7 @@ function startGame(){
 
 function startTwoPlayerGame() {
   var gameController = new TwoPlayerGameController();
+  $('#gameDiv').html('');
   gameController.run();
   $('#start-two-player-link').hide();
   $('#view-my-stats').hide();
