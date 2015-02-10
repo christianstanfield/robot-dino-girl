@@ -1,6 +1,5 @@
-var EndGame = function (game, numOfPlayers) {
+var EndGame = function (game) {
   this.game = game;
-  this.players = numOfPlayers;
 };
 
 EndGame.prototype.loadAssets = function () {
