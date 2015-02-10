@@ -1,89 +1,121 @@
-function GameController() {
-  this.player;
-  this.platforms;
-  this.cursors;
-  this.spacebar;
-  this.shootWeapon;
-  this.orbs;
-  this.redOrbs;
-  this.score;
-  this.scoreText;
-  this.world;
+var GameController = function (numOfPlayers) {
+  this.players = numOfPlayers;
+  this.playerOne;
+  this.asteria;
+  this.asteriaKeys;
+  this.playerTwo;
+  this.wysteria;
+  this.wysteriaKeys;
   this.game;
-  this.healthbar;
-  this.endGame;
+  this.world;
+  this.platforms;
   this.ledge;
   this.ground;
   this.sky;
+  this.cursors;
+  // this.spacebar;
+  // this.shootWeapon;
+  this.blueOrbs;
+  this.redOrbs;
+  this.playerOneScore;
+  this.playerTwoScore;
+  this.playerOneScoreText;
+  this.playerTwoScoreText;
+  this.healthbar;
+  this.endGame;
 }
 
-GameController.prototype.run = function() {
-  game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv', { preload: this.preload, create: this.create, update: this.update, render: this.render });
-  world = new World();
-  endGame = new EndGame(game);
+GameController.prototype.run = function () {
+  this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv', { preload: this.preload, create: this.create, update: this.update, render: this.render });
+  this.world = new World();
+  this.endGame = new EndGame(this.game);
 }
 
-GameController.prototype.preload = function() {
-  game.load.image('space', '<%= asset_path "space.jpg" %>');
-  game.load.image('cloud', '<%= asset_path "cloud-sprite.png" %>');
-  game.load.image('redOrb', '<%= asset_path "unsafe_orb.png" %>');
-  game.load.image('heart', '<%= asset_path "heart-sprite.png" %>');
-  game.load.image('blueOrb', '<%= asset_path "safe_orb.png" %>');
-  game.load.image('hitBox', '<%= asset_path "red.jpg" %>');
-  game.load.spritesheet('dude', '<%= asset_path "dude.png" %>', 32, 48);
-  endGame.loadAssets();
+GameController.prototype.preload = function () {
+  this.game.load.image('space', '<%= asset_path "space.jpg" %>');
+  this.game.load.image('cloud', '<%= asset_path "cloud-sprite.png" %>');
+  this.game.load.image('redOrb', '<%= asset_path "unsafe_orb.png" %>');
+  this.game.load.image('heart', '<%= asset_path "heart-sprite.png" %>');
+  this.game.load.image('blueOrb', '<%= asset_path "safe_orb.png" %>');
+  this.game.load.image('hitBox', '<%= asset_path "red.jpg" %>');
+  this.game.load.spritesheet('player1', '<%= asset_path "dude.png" %>', 32, 48);
+  this.game.load.spritesheet('player2', '<%= asset_path "dude2.png" %>', 32, 48);
+  this.endGame.loadAssets();
 }
 
-GameController.prototype.create = function() {
+GameController.prototype.create = function () {
 
   // Create World
-  world.setCanvas(game, 0, 0, 1280, 600);
+  this.world.setCanvas(this.game, 0, 0, 1280, 600);
+  this.game.physics.startSystem(Phaser.Physics.ARCADE);
+  this.world.buildWorld(this.game);
 
-  game.physics.startSystem(Phaser.Physics.ARCADE);
+  // Create Player 1
+  this.asteria = new Asteria(this.game, 450, 0, 'player1');
+  this.playerOne = asteria.sprite;
+  this.asteria.createHealthbar(this.game);
+  this.game.physics.arcade.enable(this.playerOne);
+  this.asteria.entersTheScene();
+  this.asteria.setMotions();
 
-  world.buildWorld(game);
-
-  // CREATE ASTERIA
-  asteria = new Asteria(game, 450, 0, 'dude');
-  player = asteria.sprite;
-  asteria.createHealthbar(game);
-  game.physics.arcade.enable(player);
-  asteria.entersTheScene();
-  asteria.setMotions();
+  // Create Player 2
+  if (this.players === 2) {
+    this.wysteria = new Asteria(this.game, 450, 0, 'player2');
+    this.playerTwo = wysteria.sprite;
+    this.wysteria.createWysteriaHealthbar(this.game);
+    this.game.physics.arcade.enable(this.playerTwo);
+    this.wysteria.entersTheScene();
+    this.wysteria.setMotions();
+  }
 
   // Set the camera
-  world.setCamera(game, player);
+  this.world.setCamera(this.game, this.playerOne);
 
-  //  SET CONTROLS
-  cursors = game.input.keyboard.createCursorKeys();
-  spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+  //  Set controls
+  this.cursors = this.game.input.keyboard.createCursorKeys();
+  this.asteriaKeys = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+  if (this.players === 2) {
+    this.wysteriaKeys = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
+  }
+  // Is spacebar needed?
+  // spacebar = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
-  game.input.keyboard.onUpCallback = function(event) {
-    if ((event.keyCode == Phaser.Keyboard.DOWN) && player.body.touching.down) {
-        asteria.stand();
-        asteria.hop();
+  // Should probably be done for Wysteria too?
+  this.game.input.keyboard.onUpCallback = function (event) {
+    if ((event.keyCode === Phaser.Keyboard.DOWN) && this.playerOne.body.touching.down) {
+        this.asteria.stand();
+        this.asteria.hop();
     }
   }
 
-  // Falling redOrbs
-  redOrbs = game.add.group();
-  redOrbs.enableBody = true;
-  game.time.events.loop(Phaser.Timer.SECOND * 5, rainRedOrbs, game);
-
-  // CREATE BLUE ORBS
-  orbs = game.add.group();
-  orbs.enableBody = true;
+  // Create blue orbs
+  this.blueOrbs = this.game.add.group();
+  this.blueOrbs.enableBody = true;
   rainOrbs();
-  game.time.events.loop(Phaser.Timer.SECOND * 3, rainOrbs, game);
+  this.game.time.events.loop(Phaser.Timer.SECOND * 3, rainBlueOrbs, this.game);
 
-  //  CREATE SCORE
-  score = 0;
-  scoreText = game.add.text(650, 16, 'Score: ' + score, { fontSize: '32px', fill: '#FFF' });
-  scoreText.fixedToCamera = true;
+  // Create red orbs
+  this.redOrbs = this.game.add.group();
+  this.redOrbs.enableBody = true;
+  this.game.time.events.loop(Phaser.Timer.SECOND * 5, rainRedOrbs, this.game);
 
+  // Create scores
+  if (this.players === 1) {
+    this.playerOneScore = 0;
+    this.playerOneScoreText = this.game.add.text(650, 16, 'Score: ' + this.playerOneScore, { fontSize: '32px', fill: '#FFF' });
+    this.playerOneScoreText.fixedToCamera = true;
+  } else {
+    this.playerOneScore = 0;
+    this.playerOneScoreText = this.game.add.text(600, 16, 'Player 1: ' + this.playerOneScore, { fontSize: '32px', fill: '#FFF' });
+    this.playerOneScoreText.fixedToCamera = true;
+
+    this.playerTwoScore = 0;
+    this.playerTwoScoreText = this.game.add.text(600, 56, 'Player 2: ' + this.playerTwoScore, { fontSize: '32px', fill: '#FFF' });
+    this.playerTwoScoreText.fixedToCamera = true;
+  }
 }
 
-GameController.prototype.update = function() {
+GameController.prototype.update = function () {
 
 
 
