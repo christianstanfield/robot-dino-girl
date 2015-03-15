@@ -37,7 +37,7 @@ var startGame = function (numOfPlayers) {
 
   var gameController;
   if (numOfPlayers === 1) {
-    gameController = new GameController();
+    gameController = new GameController(1);
   } else {
     gameController = new TwoPlayerGameController();
   }

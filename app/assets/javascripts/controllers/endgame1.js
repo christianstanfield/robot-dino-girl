@@ -3,7 +3,6 @@ var EndGame = function (game) {
 };
 
 EndGame.prototype.loadAssets = function () {
-  this.game.load.image('gameover', '<%= asset_path "game_over.png" %>');
 };
 
 EndGame.prototype.setOnePlayerWinConditions = function (playerOneScore) {
