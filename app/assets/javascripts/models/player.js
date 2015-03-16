@@ -36,6 +36,11 @@ Player.prototype.jump = function () {
   this.setVelocityY(-325);
 };
 
+// Player damage
+Player.prototype.damage = function () {
+  this.health -= 1;
+};
+
 // Helper methods
 Player.prototype.setVelocityX = function (velocityX) {
   this.sprite.body.velocity.x = velocityX;

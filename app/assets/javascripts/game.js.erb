@@ -117,6 +117,18 @@ game.create = function () {
   }
 };
 
+// Update helpers
+game.collidePlayerRedOrb = function (orb, player, healthBar) {
+  player.damage();
+  healthBar.children.pop();
+  orb.kill();
+  if (player.health < 1) player.sprite.kill();
+};
+
+game.collideP1RedOrb = function (playerSprite, orb) {
+  game.collidePlayerRedOrb(orb, game.player1, game.p1HealthBar);
+};
+
 game.update = function () {
 
   // Starting Velocity
@@ -134,7 +146,7 @@ game.update = function () {
     redOrb.alpha = redOrb.lifespan / 10000;
   });
 
-  // Collisions
+  // Setup Collisions
   phaserGame.physics.arcade.collide(game.player1.sprite, game.platforms);
   phaserGame.physics.arcade.collide(game.redOrbs, game.platforms);
   phaserGame.physics.arcade.collide(game.blueOrbs, game.platforms);
@@ -143,6 +155,19 @@ game.update = function () {
     phaserGame.physics.arcade.collide(game.player1.sprite, game.player2.sprite);
   }
 
+  phaserGame.physics.arcade.overlap(game.player1.sprite, game.redOrbs, game.collideP1RedOrb, null, phaserGame);
+
+  // Player Movement
+  if (game.player1.keys.left.isDown) {
+    game.player1.moveLeft();
+  } else if (game.player1.keys.right.isDown) {
+    game.player1.moveRight();
+  } else {
+    game.player1.standStill();
+  }
+  if (game.player1.sprite.body.touching.down) {
+    game.player1.jump();
+  }
 };
 
 game.render = function () {
