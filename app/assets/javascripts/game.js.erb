@@ -34,6 +34,15 @@ game.createHealthBar = function (healthBar, player, playerNum) {
   }
 };
 
+game.createOrbs = function (orbs, sprite) {
+  for (var i = 0; i < Math.floor(Math.random() * 10 + 5); i++) {
+    var orb = orbs.create(phaserGame.world.randomX, 0, sprite);
+    orb.body.gravity.y = 100;
+    orb.body.bounce.y = 0.7 + Math.random() * 0.2;
+    orb.lifespan = 10000;
+  }
+};
+
 game.create = function () {
 
   // Create World
@@ -63,6 +72,8 @@ game.create = function () {
   game.p1HealthBar = phaserGame.add.group();
   game.p1HealthBar.fixedToCamera = true;
   game.createHealthBar(game.p1HealthBar, game.player1, 1);
+  // Keyboard
+  game.player1.keys = phaserGame.input.keyboard.createCursorKeys();
   // Player 2
   if (game.numOfPlayers === 2) {
     var xCoord = game.cloud.x + (game.cloud.body.sourceWidth / 4) // left edge of cloud
@@ -74,7 +85,24 @@ game.create = function () {
     game.p2HealthBar = phaserGame.add.group();
     game.p2HealthBar.fixedToCamera = true;
     game.createHealthBar(game.p2HealthBar, game.player2, 2);
+
+    game.player2.keys = [];
+    game.player2.keys.push(phaserGame.input.keyboard.addKey(Phaser.Keyboard.A));
+    game.player2.keys.push(phaserGame.input.keyboard.addKey(Phaser.Keyboard.D));
   }
+
+  // Set Camera
+  phaserGame.camera.follow(game.player1.sprite, 2);
+
+  // Create Blue Orbs
+  game.blueOrbs = phaserGame.add.group();
+  game.blueOrbs.enableBody = true;
+  phaserGame.time.events.loop(Phaser.Timer.SECOND * 3, game.createOrbs(game.blueOrbs, 'blueOrb'), phaserGame);
+
+  // Create Red Orbs
+  game.redOrbs = phaserGame.add.group();
+  game.redOrbs.enableBody = true;
+  phaserGame.time.events.loop(Phaser.Timer.SECOND * 5, game.createOrbs(game.redOrbs, 'redOrb'), phaserGame);
 };
 
 game.update = function () {
