@@ -2,6 +2,7 @@ function Player (game, x, y, spriteName) {
   this.sprite = game.add.sprite(x, y, spriteName);
   this.maxHealth = 5;
   this.health = 5;
+  this.score = 0;
 }
 
 Player.prototype.enterGame = function () {
