@@ -1,4 +1,5 @@
-var game = {}, phaserGame;
+var game = {},
+    phaserGame;
 
 game.run = function (numOfPlayers) {
   this.numOfPlayers = numOfPlayers;
@@ -14,35 +15,66 @@ game.run = function (numOfPlayers) {
 }
 
 game.preload = function () {
-  this.load.image('space', '<%= asset_path "space.jpg" %>');
-  this.load.image('cloud', '<%= asset_path "cloud-sprite.png" %>');
-  this.load.image('blueOrb', '<%= asset_path "safe_orb.png" %>');
-  this.load.image('redOrb', '<%= asset_path "unsafe_orb.png" %>');
-  this.load.image('heart', '<%= asset_path "heart-sprite.png" %>');
-  this.load.image('hitBox', '<%= asset_path "red.jpg" %>');
-  this.load.spritesheet('player1', '<%= asset_path "dude.png" %>', 32, 48);
-  this.load.spritesheet('player2', '<%= asset_path "dude2.png" %>', 32, 48);
-  this.load.image('gameover', '<%= asset_path "game_over.png" %>');
+  phaserGame.load.image('space', '<%= asset_path "space.jpg" %>');
+  phaserGame.load.image('cloud', '<%= asset_path "cloud-sprite.png" %>');
+  phaserGame.load.image('blueOrb', '<%= asset_path "safe_orb.png" %>');
+  phaserGame.load.image('redOrb', '<%= asset_path "unsafe_orb.png" %>');
+  phaserGame.load.image('heart', '<%= asset_path "heart-sprite.png" %>');
+  phaserGame.load.image('hitBox', '<%= asset_path "red.jpg" %>');
+  phaserGame.load.spritesheet('player1', '<%= asset_path "dude.png" %>', 32, 48);
+  phaserGame.load.spritesheet('player2', '<%= asset_path "dude2.png" %>', 32, 48);
+  phaserGame.load.image('gameover', '<%= asset_path "game_over.png" %>');
+};
+
+// Create helpers
+game.createHealthBar = function (healthBar, player, playerNum) {
+  var yCoord = 16 + (40 * (playerNum - 1));
+  for (var i = 0; i < player.maxHealth; i++) {
+    healthBar.create((i * 40) + 16, yCoord, 'heart');
+  }
 };
 
 game.create = function () {
 
   // Create World
-  this.world.setBounds(0, 0, 1280, 600);
-  this.physics.startSystem(Phaser.Physics.ARCADE);
-  this.add.sprite(0, 0, 'space');
-
-  game.platforms = this.add.group();
+  phaserGame.world.setBounds(0, 0, 1280, 600);
+  phaserGame.physics.startSystem(Phaser.Physics.ARCADE);
+  phaserGame.add.sprite(0, 0, 'space');
+  // Platforms
+  game.platforms = phaserGame.add.group();
   game.platforms.enableBody = true;
-
-  var ground = game.platforms.create(0, this.world.height + 60);
+  // Ground
+  var ground = game.platforms.create(0, phaserGame.world.height + 60);
   ground.scale.setTo(100, 1);
   ground.body.immovable = true;
-
+  // Cloud
   game.cloud = game.platforms.create(400, 400, 'cloud');
   game.cloud.body.immovable = true;
   game.cloud.body.setSize(90,35);
   game.cloud.lifespan = 10000;
+
+  // Create Players
+  var xCoord = game.cloud.x + ((game.cloud.body.sourceWidth / 4) * 3) // right edge of cloud
+  game.player1 = new Player(phaserGame, xCoord, 0, 'player1');
+  phaserGame.physics.arcade.enable(game.player1.sprite);
+  game.player1.enterGame();
+  game.player1.setSpriteMotion();
+  // Health bar
+  game.p1HealthBar = phaserGame.add.group();
+  game.p1HealthBar.fixedToCamera = true;
+  game.createHealthBar(game.p1HealthBar, game.player1, 1);
+  // Player 2
+  if (game.numOfPlayers === 2) {
+    var xCoord = game.cloud.x + (game.cloud.body.sourceWidth / 4) // left edge of cloud
+    game.player2 = new Player(phaserGame, xCoord, 0, 'player2');
+    phaserGame.physics.arcade.enable(game.player2.sprite);
+    game.player2.enterGame();
+    game.player2.setSpriteMotion();
+
+    game.p2HealthBar = phaserGame.add.group();
+    game.p2HealthBar.fixedToCamera = true;
+    game.createHealthBar(game.p2HealthBar, game.player2, 2);
+  }
 };
 
 game.update = function () {
