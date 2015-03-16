@@ -1,0 +1,54 @@
+var game = {}, phaserGame;
+
+game.run = function (numOfPlayers) {
+  this.numOfPlayers = numOfPlayers;
+  phaserGame = new Phaser.Game(800,
+                               600,
+                               Phaser.AUTO,
+                               'gameDiv',
+                               { preload: game.preload,
+                                 create:  game.create,
+                                 update:  game.update,
+                                 render:  game.render }
+  );
+}
+
+game.preload = function () {
+  this.load.image('space', '<%= asset_path "space.jpg" %>');
+  this.load.image('cloud', '<%= asset_path "cloud-sprite.png" %>');
+  this.load.image('blueOrb', '<%= asset_path "safe_orb.png" %>');
+  this.load.image('redOrb', '<%= asset_path "unsafe_orb.png" %>');
+  this.load.image('heart', '<%= asset_path "heart-sprite.png" %>');
+  this.load.image('hitBox', '<%= asset_path "red.jpg" %>');
+  this.load.spritesheet('player1', '<%= asset_path "dude.png" %>', 32, 48);
+  this.load.spritesheet('player2', '<%= asset_path "dude2.png" %>', 32, 48);
+  this.load.image('gameover', '<%= asset_path "game_over.png" %>');
+};
+
+game.create = function () {
+
+  // Create World
+  this.world.setBounds(0, 0, 1280, 600);
+  this.physics.startSystem(Phaser.Physics.ARCADE);
+  this.add.sprite(0, 0, 'space');
+
+  game.platforms = this.add.group();
+  game.platforms.enableBody = true;
+
+  var ground = game.platforms.create(0, this.world.height + 60);
+  ground.scale.setTo(100, 1);
+  ground.body.immovable = true;
+
+  game.cloud = game.platforms.create(400, 400, 'cloud');
+  game.cloud.body.immovable = true;
+  game.cloud.body.setSize(90,35);
+  game.cloud.lifespan = 10000;
+};
+
+game.update = function () {
+
+};
+
+game.render = function () {
+
+};
