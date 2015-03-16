@@ -16,19 +16,19 @@ function GameController (numOfPlayers) {
   this.playerTwoHealthBar;
 
   this.game;
-  this.worldModel;
+  // this.worldModel;
   this.platforms;
-  this.ledge;
-  this.ground;
-  this.sky;
+  this.cloud;
+  // this.ground;
+  // this.sky;
   this.blueOrbs;
   this.redOrbs;
   this.endGame;
 }
 
 GameController.prototype.run = function () {
-  this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv', { preload: this.preload(), create: this.create(), update: this.update(), render: this.render() });
-  this.worldModel = new World();
+  this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv', { preload: this.preload, create: this.create, update: this.update, render: this.render });
+  // this.worldModel = new World();
   this.endGame = new EndGame(this.game);
 }
 
@@ -42,29 +42,47 @@ GameController.prototype.preload = function () {
   this.game.load.spritesheet('player1', '<%= asset_path "dude.png" %>', 32, 48);
   this.game.load.spritesheet('player2', '<%= asset_path "dude2.png" %>', 32, 48);
   this.game.load.image('gameover', '<%= asset_path "game_over.png" %>');
-
-  // this.endGame.loadAssets();
 }
 
 GameController.prototype.create = function () {
 
   // Create World
-  this.worldModel.setCanvas(this.game, 0, 0, 1280, 600);
+  this.game.world.setBounds(0, 0, 1280, 600);
   this.game.physics.startSystem(Phaser.Physics.ARCADE);
-  this.worldModel.buildWorld(this.game);
+  this.game.add.sprite(0, 0, 'space');
+
+  this.platforms = this.game.add.group();
+  this.platforms.enableBody = true;
+
+  var ground = this.platforms.create(0, this.game.world.height + 60);
+  ground.scale.setTo(100, 1);
+  ground.body.immovable = true;
+
+  this.cloud = this.platforms.create(400, 400, 'cloud');
+  this.cloud.body.immovable = true;
+  this.cloud.body.setSize(90,35);
+  this.cloud.lifespan = 10000;
 
   // Create Player 1
   this.asteria = new Asteria(this.game, 475, 0, 'player1');
-  this.playerOne = asteria.sprite;
-  this.asteria.createHealthbar(this.game);
-  this.game.physics.arcade.enable(this.playerOne);
+  this.playerOne = this.asteria.sprite;
+  this.playerOneHealthBar = this.game.add.group();
+  var createHealthBar = function (healthbar) {
+    for (var i = 0; i < 5; i++) {
+      healthbar.create((i * 40)+16, 16, 'heart');
+    }
+  }
+  createHealthBar(this.playerOneHealthBar);
+  this.playerOneHealthBar.fixedToCamera = true;
+
+  this.game.physics.arcade.enable(this.asteria.sprite);
   this.asteria.entersTheScene();
   this.asteria.setMotions();
 
   // Create Player 2
   if (this.players === 2) {
     this.wysteria = new Asteria(this.game, 425, 0, 'player2');
-    this.playerTwo = wysteria.sprite;
+    this.playerTwo = this.wysteria.sprite;
     this.wysteria.createWysteriaHealthbar(this.game);
     this.game.physics.arcade.enable(this.playerTwo);
     this.wysteria.entersTheScene();
@@ -72,7 +90,7 @@ GameController.prototype.create = function () {
   }
 
   // Set the camera
-  this.worldModel.setCamera(this.game, this.playerOne);
+  this.game.camera.follow(this.playerOne, 2);
 
   //  Set controls
   this.asteriaKeys = this.game.input.keyboard.createCursorKeys();
@@ -94,12 +112,32 @@ GameController.prototype.create = function () {
   // Create blue orbs
   this.blueOrbs = this.game.add.group();
   this.blueOrbs.enableBody = true;
-  this.game.time.events.loop(Phaser.Timer.SECOND * 3, this.worldModel.rainBlueOrbs, this.game);
+
+  var rainBlueOrbs = function (blueOrbs, game) {
+    for (var i = 0; i < Math.floor(Math.random()*10+5); i++) {
+      var blueOrb = blueOrbs.create(game.world.randomX, 0, 'blueOrb');
+      blueOrb.body.gravity.y = 100;
+      blueOrb.body.bounce.y = 0.7 + Math.random() * 0.2;
+      blueOrb.lifespan = 10000;
+    }
+  }
+
+  this.game.time.events.loop(Phaser.Timer.SECOND * 3, rainBlueOrbs(this.blueOrbs, this.game), this.game);
 
   // Create red orbs
   this.redOrbs = this.game.add.group();
   this.redOrbs.enableBody = true;
-  this.game.time.events.loop(Phaser.Timer.SECOND * 5, this.worldModel.rainRedOrbs, this.game);
+
+  var rainRedOrbs = function (redOrbs, game) {
+    for (var i = 0; i < Math.floor(Math.random()*10+5); i++) {
+      var redOrb = redOrbs.create(game.world.randomX, 0, 'redOrb');
+      redOrb.body.gravity.y = 100;
+      redOrb.body.bounce.y = 0.7 + Math.random() * 0.2;
+      redOrb.lifespan = 10000;
+    }
+  }
+
+  this.game.time.events.loop(Phaser.Timer.SECOND * 5, rainRedOrbs(this.redOrbs, this.game), this.game);
 
   // Create scores
   if (this.players === 1) {
@@ -134,20 +172,8 @@ GameController.prototype.update = function () {
     this.wysteria.setVelocityX(0);
   }
 
-  // killDeadOrbs = function(orb) {
-  //   if (orb.body.velocity.y < 1 ) {
-  //     orb.bounceCount += 1;
-  //     console.log(orb.bounceCount);
-  //   }
-  //   if (orb.bounceCount > 2) {
-  //     orb.kill();
-  //   }
-  // }
-
-  // orbs.children.forEach(killDeadOrbs);
-
   // Set object lifespans
-  this.ledge.alpha = this.ledge.lifespan / 10000;
+  this.cloud.alpha = this.cloud.lifespan / 10000;
 
   this.blueOrbs.forEachAlive(function (blueOrb) {
     blueOrb.alpha = blueOrb.lifespan / 10000;
@@ -190,22 +216,15 @@ GameController.prototype.update = function () {
     hitBox.alpha = 0.7;
   }
 
-  var playerOneLoseHealth = function (player, redOrb) {
-    if (this.asteria.health === 1) {
-      this.playerOne.kill();
-    } else {
-      this.asteria.health -= 1
-      this.playerOneHealthBar.children.pop();
-    }
-
-    showHitBox();
+  var playerOneLoseHealth = function (player, redOrb, healthBar) {
+    healthBar.children.pop();
   }
 
   var playerTwoLoseHealth = function (player, redOrb) {
     if (this.wysteria.health === 1) {
       this.playerTwo.kill();
     } else {
-      this.wysteria.health -= 1
+      this.wysteria.health -= 1;
       this.playerTwoHealthBar.children.pop();
     }
 
@@ -213,7 +232,7 @@ GameController.prototype.update = function () {
   }
 
   // Collision logic
-  this.game.physics.arcade.overlap(this.playerOne, this.redOrbs, playerOneLoseHealth, null, this.game);
+  this.game.physics.arcade.overlap(this.playerOne, this.redOrbs, playerOneLoseHealth(this.playerOne, this.redOrbs, this.playerOneHealthBar), this.asteria.canSurvive, this.game);
   this.game.physics.arcade.overlap(this.playerOne, this.redOrbs, collidePlayerRedOrb, null, this.game);
   this.game.physics.arcade.overlap(this.playerOne, this.blueOrbs, collidePlayerOneBlueOrb, null, this.game);
 
@@ -227,7 +246,7 @@ GameController.prototype.update = function () {
     this.endGame.setOnePlayerWinConditions(this.playerOneScore);
 
   } else {
-    endTwoPlayerGame.setConditions(this.playerOneScore, this.playerTwoScore);
+    // TwoPlayerEndGame.setConditions(this.playerOneScore, this.playerTwoScore);
   }
 
   // Player 1 movement
@@ -244,16 +263,18 @@ GameController.prototype.update = function () {
   }
 
   // Player 2 movement
-  if (this.wysteriaKeys[0].isDown) {
-    this.wysteria.moveLeft();
-  } else if (this.wysteriaKeys[1].isDown) {
-    this.wysteria.moveRight();
-  } else {
-    this.wysteria.standStill();
-  }
-  //  Autojump for minigame
-  if (this.playerTwo.body.touching.down) {
-    this.wysteria.jump();
+  if (this.players === 2) {
+    if (this.wysteriaKeys[0].isDown) {
+      this.wysteria.moveLeft();
+    } else if (this.wysteriaKeys[1].isDown) {
+      this.wysteria.moveRight();
+    } else {
+      this.wysteria.standStill();
+    }
+    //  Autojump for minigame
+    if (this.playerTwo.body.touching.down) {
+      this.wysteria.jump();
+    }
   }
 }
 
