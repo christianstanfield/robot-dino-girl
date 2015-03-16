@@ -97,12 +97,12 @@ game.create = function () {
   // Create Blue Orbs
   game.blueOrbs = phaserGame.add.group();
   game.blueOrbs.enableBody = true;
-  phaserGame.time.events.loop(Phaser.Timer.SECOND * 3, game.createOrbs(game.blueOrbs, 'blueOrb'), phaserGame);
+  phaserGame.time.events.loop(Phaser.Timer.SECOND * 3, game.createOrbs, phaserGame, game.blueOrbs, 'blueOrb'); // weird syntax, last two are args for createOrbs
 
   // Create Red Orbs
   game.redOrbs = phaserGame.add.group();
   game.redOrbs.enableBody = true;
-  phaserGame.time.events.loop(Phaser.Timer.SECOND * 5, game.createOrbs(game.redOrbs, 'redOrb'), phaserGame);
+  phaserGame.time.events.loop(Phaser.Timer.SECOND * 5, game.createOrbs, phaserGame, game.redOrbs, 'redOrb');
 
   // Create Scores
   if (game.numOfPlayers === 1) {
@@ -118,6 +118,30 @@ game.create = function () {
 };
 
 game.update = function () {
+
+  // Starting Velocity
+  game.player1.setVelocityX(0);
+  if (game.numOfPlayers === 2) game.player2.setVelocityX(0);
+
+  // Object Fading
+  game.cloud.alpha = game.cloud.lifespan / 10000;
+
+  game.blueOrbs.forEachAlive(function (blueOrb) {
+    blueOrb.alpha = blueOrb.lifespan / 10000;
+  });
+
+  game.redOrbs.forEachAlive(function (redOrb) {
+    redOrb.alpha = redOrb.lifespan / 10000;
+  });
+
+  // Collisions
+  phaserGame.physics.arcade.collide(game.player1.sprite, game.platforms);
+  phaserGame.physics.arcade.collide(game.redOrbs, game.platforms);
+  phaserGame.physics.arcade.collide(game.blueOrbs, game.platforms);
+  if (game.numOfPlayers === 2) {
+    phaserGame.physics.arcade.collide(game.player2.sprite, game.platforms);
+    phaserGame.physics.arcade.collide(game.player1.sprite, game.player2.sprite);
+  }
 
 };
 
