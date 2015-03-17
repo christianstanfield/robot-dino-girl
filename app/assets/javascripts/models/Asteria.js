@@ -31,8 +31,8 @@ Asteria.prototype.createWysteriaHealthbar = function(game) {
 Asteria.prototype.setMotions = function(){
   this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
   this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
-  this.sprite.animations.add('crawlRight', [5, 6, 7, 8], 10, true);
-  this.sprite.animations.add('crawlLeft', [5, 6, 7, 8], 10, true);
+  // this.sprite.animations.add('crawlRight', [5, 6, 7, 8], 10, true);
+  // this.sprite.animations.add('crawlLeft', [5, 6, 7, 8], 10, true);
 };
 
 Asteria.prototype.moveLeft = function() {
@@ -52,7 +52,7 @@ Asteria.prototype.standStill = function(){
 
 Asteria.prototype.jump = function() {
   this.setVelocityY(-325);
-}
+};
 
 Asteria.prototype.crouch = function() {
   this.reSize(32, 24);
@@ -61,29 +61,29 @@ Asteria.prototype.crouch = function() {
   this.sprite.animations.stop();
   this.sprite.frame = 5;
   this.sprite.height = 24;
-}
+};
 
 Asteria.prototype.stand = function() {
   this.reSize(32, 48);
   this.sprite.crop();
   this.sprite.height = 48;
-}
+};
 
 Asteria.prototype.hop = function() {
   this.setVelocityY(-120);
-}
+};
 
 Asteria.prototype.crawlRight = function() {
   this.setVelocityX(150);
   this.sprite.animations.play('right');
   this.sprite.animations.stop();
-}
+};
 
 Asteria.prototype.crawlLeft = function() {
   this.setVelocityX(-150);
   this.sprite.animations.play('left');
   this.sprite.animations.stop();
-}
+};
 // Helper methods
 Asteria.prototype.setVelocityX = function(velocityX) {
   this.sprite.body.velocity.x = velocityX;
@@ -102,9 +102,26 @@ Asteria.prototype.getVelocityY = function() {
 };
 
 Asteria.prototype.reSize = function(sizeX, sizeY) {
-  this.sprite.body.setSize(sizeX, sizeY, 0, 0)
-}
+  this.sprite.body.setSize(sizeX, sizeY, 0, 0);
+};
 
-Asteria.prototype.fire = function(){
+Asteria.prototype.loseHealth = function (player, redOrb) {
+  if (this.health === 1) {
+    player.kill();
+  } else {
+    this.health -= 1;
+    this.playerOneHealthBar.children.pop();
+  }
 
+  showHitBox();
+};
+
+Asteria.prototype.canSurvive = function () {
+  if (this.health === 1) {
+    this.sprite.kill();
+    return false;
+  } else {
+    this.health -= 1;
+    return true;
+  }
 };

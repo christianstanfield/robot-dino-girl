@@ -1,0 +1,241 @@
+var game = {},
+    phaserGame;
+
+game.run = function (numOfPlayers) {
+  this.numOfPlayers = numOfPlayers;
+  phaserGame = new Phaser.Game(800,
+                               600,
+                               Phaser.AUTO,
+                               'gameDiv',
+                               { preload: game.preload,
+                                 create:  game.create,
+                                 update:  game.update }
+  );
+};
+
+game.preload = function () {
+  phaserGame.load.image('space', '<%= asset_path "space.jpg" %>');
+  phaserGame.load.image('cloud', '<%= asset_path "cloud-sprite.png" %>');
+  phaserGame.load.image('blueOrb', '<%= asset_path "safe_orb.png" %>');
+  phaserGame.load.image('redOrb', '<%= asset_path "unsafe_orb.png" %>');
+  phaserGame.load.image('heart', '<%= asset_path "heart-sprite.png" %>');
+  phaserGame.load.image('hitBox', '<%= asset_path "red.jpg" %>');
+  phaserGame.load.spritesheet('player1', '<%= asset_path "dude.png" %>', 32, 48);
+  phaserGame.load.spritesheet('player2', '<%= asset_path "dude2.png" %>', 32, 48);
+  phaserGame.load.image('gameover', '<%= asset_path "game_over.png" %>');
+};
+
+// Create helpers
+game.createHealthBar = function (healthBar, player, playerNum) {
+  var yCoord = 16 + (40 * (playerNum - 1));
+  for (var i = 0; i < player.maxHealth; i++) {
+    healthBar.create((i * 40) + 16, yCoord, 'heart');
+  }
+};
+
+game.createOrbs = function (orbs, sprite) {
+  for (var i = 0; i < Math.floor(Math.random() * 10 + 5); i++) {
+    var orb = orbs.create(phaserGame.world.randomX, 0, sprite);
+    orb.body.gravity.y = 100;
+    orb.body.bounce.y = 0.7 + Math.random() * 0.2;
+    orb.lifespan = 10000;
+  }
+};
+
+game.create = function () {
+
+  // Create World
+  phaserGame.world.setBounds(0, 0, 1280, 600);
+  phaserGame.physics.startSystem(Phaser.Physics.ARCADE);
+  phaserGame.add.sprite(0, 0, 'space');
+  // Platforms
+  game.platforms = phaserGame.add.group();
+  game.platforms.enableBody = true;
+  // Ground
+  var ground = game.platforms.create(0, phaserGame.world.height + 60);
+  ground.scale.setTo(100, 1);
+  ground.body.immovable = true;
+  // Cloud
+  game.cloud = game.platforms.create(400, 400, 'cloud');
+  game.cloud.body.immovable = true;
+  game.cloud.body.setSize(90,35);
+  game.cloud.lifespan = 10000;
+
+  // Create Players
+  var xCoord = game.cloud.x + ((game.cloud.body.sourceWidth / 4) * 3); // right edge of cloud
+  game.player1 = new Player(phaserGame, xCoord, 0, 'player1');
+  phaserGame.physics.arcade.enable(game.player1.sprite);
+  game.player1.enterGame();
+  game.player1.setSpriteMotion();
+  // Health bar
+  game.p1HealthBar = phaserGame.add.group();
+  game.p1HealthBar.fixedToCamera = true;
+  game.createHealthBar(game.p1HealthBar, game.player1, 1);
+  // Keyboard
+  game.player1.keys = phaserGame.input.keyboard.createCursorKeys();
+  // Player 2
+  if (game.numOfPlayers === 2) {
+    xCoord = game.cloud.x + (game.cloud.body.sourceWidth / 4); // left edge of cloud
+    game.player2 = new Player(phaserGame, xCoord, 0, 'player2');
+    phaserGame.physics.arcade.enable(game.player2.sprite);
+    game.player2.enterGame();
+    game.player2.setSpriteMotion();
+
+    game.p2HealthBar = phaserGame.add.group();
+    game.p2HealthBar.fixedToCamera = true;
+    game.createHealthBar(game.p2HealthBar, game.player2, 2);
+
+    game.player2.keys = [];
+    game.player2.keys.push(phaserGame.input.keyboard.addKey(Phaser.Keyboard.A));
+    game.player2.keys.push(phaserGame.input.keyboard.addKey(Phaser.Keyboard.D));
+  }
+
+  // Set Camera
+  phaserGame.camera.follow(game.player1.sprite, 2);
+
+  // Create Blue Orbs
+  game.blueOrbs = phaserGame.add.group();
+  game.blueOrbs.enableBody = true;
+  phaserGame.time.events.loop(Phaser.Timer.SECOND * 3, game.createOrbs, phaserGame, game.blueOrbs, 'blueOrb'); // weird syntax, last two are args for createOrbs
+
+  // Create Red Orbs
+  game.redOrbs = phaserGame.add.group();
+  game.redOrbs.enableBody = true;
+  phaserGame.time.events.loop(Phaser.Timer.SECOND * 5, game.createOrbs, phaserGame, game.redOrbs, 'redOrb');
+
+  // Create Scores
+  var scoreFontSize = '32px';
+  var scoreTextColor = '#FFF';
+
+  if (game.numOfPlayers === 1) {
+    game.p1Score = phaserGame.add.text(650, 16, 'Score: ' + game.player1.score, { fontSize: scoreFontSize, fill: scoreTextColor });
+    game.p1Score.fixedToCamera = true;
+  } else {
+    game.p1Score = phaserGame.add.text(600, 16, 'Player 1: ' + game.player1.score, { fontSize: scoreFontSize, fill: scoreTextColor });
+    game.p1Score.fixedToCamera = true;
+    // Player 2
+    game.p2Score = phaserGame.add.text(600, 56, 'Player 2: ' + game.player2.score, { fontSize: scoreFontSize, fill: scoreTextColor });
+    game.p2Score.fixedToCamera = true;
+  }
+};
+
+// Update helpers
+game.flashHitBox = function () {
+  var hitBox = phaserGame.add.sprite(0, 0, 'hitBox');
+  hitBox.width = phaserGame.width;
+  hitBox.height = phaserGame.height;
+  hitBox.fixedToCamera = true;
+  hitBox.lifespan = 70;
+  hitBox.alpha = 0.7;
+};
+
+game.collidePlayerRedOrb = function (orb, player, healthBar) {
+  player.takeDamage();
+  healthBar.children.pop();
+  orb.kill();
+  game.flashHitBox();
+  if (player.health < 1) player.sprite.kill();
+};
+
+game.collideP1RedOrb = function (playerSprite, orb) {
+  game.collidePlayerRedOrb(orb, game.player1, game.p1HealthBar);
+};
+
+game.collideP2RedOrb = function (playerSprite, orb) {
+  game.collidePlayerRedOrb(orb, game.player2, game.p2HealthBar);
+};
+
+game.collidePlayerBlueOrb = function (orb, player, score) {
+  player.scorePoints();
+  var scoreString = score.text;
+  var oldScore = scoreString.substr(scoreString.indexOf(':') + 2);
+  score.text = scoreString.replace(oldScore, player.score);
+  orb.kill();
+};
+
+game.collideP1BlueOrb = function (playerSprite, orb) {
+  game.collidePlayerBlueOrb(orb, game.player1, game.p1Score);
+};
+
+game.collideP2BlueOrb = function (playerSprite, orb) {
+  game.collidePlayerBlueOrb(orb, game.player2, game.p2Score);
+};
+
+game.update = function () {
+
+  // Starting Velocity
+  game.player1.setVelocityX(0);
+  if (game.numOfPlayers === 2) game.player2.setVelocityX(0);
+
+  // Object Fading
+  game.cloud.alpha = game.cloud.lifespan / 10000;
+
+  game.blueOrbs.forEachAlive(function (blueOrb) {
+    blueOrb.alpha = blueOrb.lifespan / 10000;
+  });
+
+  game.redOrbs.forEachAlive(function (redOrb) {
+    redOrb.alpha = redOrb.lifespan / 10000;
+  });
+
+  // Setup Collisions
+  phaserGame.physics.arcade.collide(game.player1.sprite, game.platforms);
+  phaserGame.physics.arcade.collide(game.redOrbs, game.platforms);
+  phaserGame.physics.arcade.collide(game.blueOrbs, game.platforms);
+  if (game.numOfPlayers === 2) {
+    phaserGame.physics.arcade.collide(game.player2.sprite, game.platforms);
+    phaserGame.physics.arcade.collide(game.player1.sprite, game.player2.sprite);
+  }
+
+  phaserGame.physics.arcade.overlap(game.player1.sprite, game.redOrbs, game.collideP1RedOrb);
+  phaserGame.physics.arcade.overlap(game.player1.sprite, game.blueOrbs, game.collideP1BlueOrb);
+  if (game.numOfPlayers === 2) {
+    phaserGame.physics.arcade.overlap(game.player2.sprite, game.redOrbs, game.collideP2RedOrb);
+    phaserGame.physics.arcade.overlap(game.player2.sprite, game.blueOrbs, game.collideP2BlueOrb);
+  }
+
+  // Player Movement
+  if (game.player1.keys.left.isDown) {
+    game.player1.moveLeft();
+  } else if (game.player1.keys.right.isDown) {
+    game.player1.moveRight();
+  } else {
+    game.player1.standStill();
+  }
+  if (game.player1.sprite.body.touching.down) {
+    game.player1.jump();
+  }
+  if (game.numOfPlayers === 2) {
+    if (game.player2.keys[0].isDown) {
+      game.player2.moveLeft();
+    } else if (game.player2.keys[1].isDown) {
+      game.player2.moveRight();
+    } else {
+      game.player2.standStill();
+    }
+    if (game.player2.sprite.body.touching.down) {
+      game.player2.jump();
+    }
+  }
+
+  // Gave Over
+  var fallenOffScreen = game.player1.sprite.position.y > phaserGame.height;
+  if (fallenOffScreen || game.player1.health < 1) game.gameOver();
+  if (game.numOfPlayers === 2) {
+    fallenOffScreen = game.player2.sprite.position.y > phaserGame.height;
+    if (fallenOffScreen || game.player2.health < 1) game.gameOver();
+  }
+};
+
+game.gameOver = function () {
+  phaserGame.paused = true;
+  game.showGameOverScreen();
+};
+
+game.showGameOverScreen = function () {
+  var gameOverScreen = phaserGame.add.sprite(0, 0, 'gameover');
+  gameOverScreen.width = phaserGame.width;
+  gameOverScreen.height = phaserGame.height;
+  gameOverScreen.fixedToCamera = true;
+  gameOverScreen.alpha = 0.5;
+};
