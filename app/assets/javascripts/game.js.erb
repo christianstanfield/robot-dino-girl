@@ -11,7 +11,7 @@ game.run = function (numOfPlayers) {
                                  create:  game.create,
                                  update:  game.update }
   );
-}
+};
 
 game.preload = function () {
   phaserGame.load.image('space', '<%= asset_path "space.jpg" %>');
@@ -62,7 +62,7 @@ game.create = function () {
   game.cloud.lifespan = 10000;
 
   // Create Players
-  var xCoord = game.cloud.x + ((game.cloud.body.sourceWidth / 4) * 3) // right edge of cloud
+  var xCoord = game.cloud.x + ((game.cloud.body.sourceWidth / 4) * 3); // right edge of cloud
   game.player1 = new Player(phaserGame, xCoord, 0, 'player1');
   phaserGame.physics.arcade.enable(game.player1.sprite);
   game.player1.enterGame();
@@ -75,7 +75,7 @@ game.create = function () {
   game.player1.keys = phaserGame.input.keyboard.createCursorKeys();
   // Player 2
   if (game.numOfPlayers === 2) {
-    var xCoord = game.cloud.x + (game.cloud.body.sourceWidth / 4) // left edge of cloud
+    xCoord = game.cloud.x + (game.cloud.body.sourceWidth / 4); // left edge of cloud
     game.player2 = new Player(phaserGame, xCoord, 0, 'player2');
     phaserGame.physics.arcade.enable(game.player2.sprite);
     game.player2.enterGame();
@@ -222,7 +222,7 @@ game.update = function () {
   var fallenOffScreen = game.player1.sprite.position.y > phaserGame.height;
   if (fallenOffScreen || game.player1.health < 1) game.gameOver();
   if (game.numOfPlayers === 2) {
-    var fallenOffScreen = game.player2.sprite.position.y > phaserGame.height;
+    fallenOffScreen = game.player2.sprite.position.y > phaserGame.height;
     if (fallenOffScreen || game.player2.health < 1) game.gameOver();
   }
 };
