@@ -220,16 +220,17 @@ game.update = function () {
 
   // Gave Over
   var fallenOffScreen = game.player1.sprite.position.y > phaserGame.height;
-  if (fallenOffScreen || game.player1.health < 1) game.gameOver();
+  if (fallenOffScreen || game.player1.health < 1) game.gameOver(2);
   if (game.numOfPlayers === 2) {
     fallenOffScreen = game.player2.sprite.position.y > phaserGame.height;
-    if (fallenOffScreen || game.player2.health < 1) game.gameOver();
+    if (fallenOffScreen || game.player2.health < 1) game.gameOver(1);
   }
 };
 
-game.gameOver = function () {
+game.gameOver = function (playerNum) {
   phaserGame.paused = true;
   game.showGameOverScreen();
+  game.showGameStats(playerNum);
 };
 
 game.showGameOverScreen = function () {
@@ -238,4 +239,14 @@ game.showGameOverScreen = function () {
   gameOverScreen.height = phaserGame.height;
   gameOverScreen.fixedToCamera = true;
   gameOverScreen.alpha = 0.5;
+};
+
+game.showGameStats = function (playerNum) {
+  var stats = phaserGame.add.text(phaserGame.width / 2 - 100, phaserGame.height / 2 - 250, '', { fontSize: '32px', fill: '#F00' });
+  stats.fixedToCamera = true;
+  if (game.numOfPlayers === 1) {
+    stats.text = 'Your score: ' + game.player1.score
+  } else {
+    stats.text = 'Player ' + playerNum + ' wins!' + '\nPlayer 1 score: ' + game.player1.score + '\nPlayer 2 score: ' + game.player2.score
+  }
 };
