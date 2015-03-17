@@ -9,8 +9,7 @@ game.run = function (numOfPlayers) {
                                'gameDiv',
                                { preload: game.preload,
                                  create:  game.create,
-                                 update:  game.update,
-                                 render:  game.render }
+                                 update:  game.update }
   );
 }
 
@@ -203,8 +202,16 @@ game.update = function () {
   if (game.player1.sprite.body.touching.down) {
     game.player1.jump();
   }
-};
-
-game.render = function () {
-
+  if (game.numOfPlayers === 2) {
+    if (game.player2.keys[0].isDown) {
+      game.player2.moveLeft();
+    } else if (game.player2.keys[1].isDown) {
+      game.player2.moveRight();
+    } else {
+      game.player2.standStill();
+    }
+    if (game.player2.sprite.body.touching.down) {
+      game.player2.jump();
+    }
+  }
 };
