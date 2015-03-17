@@ -40,8 +40,8 @@ var startGame = function (numOfPlayers) {
   $('#start-two-player-link').hide();
   $('#view-my-stats').hide();
   $('#all-stats').hide();
-  $('#headline').addClass('hide');
-  $('#game-fullscreen').removeClass('hide');
+  $('.headline').addClass('xx-large');
+  $('.subheadline').removeClass('x-large').addClass('medium').css('margin-top','-20px');
   $('#game-fullscreen').addClass('show');
 
   game.run(numOfPlayers);
