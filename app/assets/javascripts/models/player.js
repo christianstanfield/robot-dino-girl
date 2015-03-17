@@ -36,9 +36,13 @@ Player.prototype.jump = function () {
   this.setVelocityY(-325);
 };
 
-// Player damage
-Player.prototype.damage = function () {
+// Player collision
+Player.prototype.takeDamage = function () {
   this.health -= 1;
+};
+
+Player.prototype.scorePoints = function () {
+ this.score += 10;
 };
 
 // Helper methods

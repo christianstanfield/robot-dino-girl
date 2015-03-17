@@ -118,15 +118,45 @@ game.create = function () {
 };
 
 // Update helpers
+game.flashHitBox = function () {
+  var hitBox = phaserGame.add.sprite(0, 0, 'hitBox');
+  hitBox.width = phaserGame.width;
+  hitBox.height = phaserGame.height;
+  hitBox.fixedToCamera = true;
+  hitBox.lifespan = 70;
+  hitBox.alpha = 0.7;
+};
+
 game.collidePlayerRedOrb = function (orb, player, healthBar) {
-  player.damage();
+  player.takeDamage();
   healthBar.children.pop();
   orb.kill();
+  game.flashHitBox();
   if (player.health < 1) player.sprite.kill();
 };
 
 game.collideP1RedOrb = function (playerSprite, orb) {
   game.collidePlayerRedOrb(orb, game.player1, game.p1HealthBar);
+};
+
+game.collideP2RedOrb = function (playerSprite, orb) {
+  game.collidePlayerRedOrb(orb, game.player2, game.p2HealthBar);
+};
+
+game.collidePlayerBlueOrb = function (orb, player, score) {
+  player.scorePoints();
+  var scoreString = score.text;
+  var oldScore = scoreString.substr(scoreString.indexOf(':') + 2);
+  score.text = scoreString.replace(oldScore, player.score);
+  orb.kill();
+};
+
+game.collideP1BlueOrb = function (playerSprite, orb) {
+  game.collidePlayerBlueOrb(orb, game.player1, game.p1Score);
+};
+
+game.collideP2BlueOrb = function (playerSprite, orb) {
+  game.collidePlayerBlueOrb(orb, game.player2, game.p2Score);
 };
 
 game.update = function () {
@@ -155,7 +185,12 @@ game.update = function () {
     phaserGame.physics.arcade.collide(game.player1.sprite, game.player2.sprite);
   }
 
-  phaserGame.physics.arcade.overlap(game.player1.sprite, game.redOrbs, game.collideP1RedOrb, null, phaserGame);
+  phaserGame.physics.arcade.overlap(game.player1.sprite, game.redOrbs, game.collideP1RedOrb);
+  phaserGame.physics.arcade.overlap(game.player1.sprite, game.blueOrbs, game.collideP1BlueOrb);
+  if (game.numOfPlayers === 2) {
+    phaserGame.physics.arcade.overlap(game.player2.sprite, game.redOrbs, game.collideP2RedOrb);
+    phaserGame.physics.arcade.overlap(game.player2.sprite, game.blueOrbs, game.collideP2BlueOrb);
+  }
 
   // Player Movement
   if (game.player1.keys.left.isDown) {

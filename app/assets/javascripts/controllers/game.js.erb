@@ -157,88 +157,88 @@ GameController.prototype.create = function () {
 
 GameController.prototype.update = function () {
 
-  //  Collide the players and orbs with the platforms
-  this.game.physics.arcade.collide(this.playerOne, this.platforms);
-  this.game.physics.arcade.collide(this.redOrbs, this.platforms);
-  this.game.physics.arcade.collide(this.blueOrbs, this.platforms);
-  if (this.players === 2) {
-    this.game.physics.arcade.collide(this.playerTwo, this.platforms);
-    this.game.physics.arcade.collide(this.playerOne, this.playerTwo);
-  }
-
-  // Set starting X velocities
-  this.asteria.setVelocityX(0);
-  if (this.players === 2) {
-    this.wysteria.setVelocityX(0);
-  }
-
-  // Set object lifespans
-  this.cloud.alpha = this.cloud.lifespan / 10000;
-
-  this.blueOrbs.forEachAlive(function (blueOrb) {
-    blueOrb.alpha = blueOrb.lifespan / 10000;
-  });
-
-  this.redOrbs.forEachAlive(function (redOrb) {
-    redOrb.alpha = redOrb.lifespan / 10000;
-  });
-
-  // Player / Orb collisions
-  var collidePlayerOneBlueOrb = function (player, blueOrb) {
-    blueOrb.kill();
-    //  Add and update the score
-    this.playerOneScore += 10;
-    if (this.players === 1) {
-      this.playerOneScoreText.text = 'Score: ' + this.playerOneScore;
-    } else {
-      this.playerOneScoreText.text = 'Player 1: ' + this.playerOneScore;
-    }
-  }
-
-  var collidePlayerTwoBlueOrb = function (player, blueOrb) {
-    blueOrb.kill();
-    //  Add and update the score
-    this.playerTwoScore += 10;
-    this.playerTwoScoreText.text = 'Player 2: ' + this.playerTwoScore;
-  }
-
-  var collidePlayerRedOrb = function (player, redOrb) {
-    redOrb.kill();
-  }
-
-  // Health Conditions (Move to model)
-  var showHitBox = function () {
-    var hitBox = this.game.add.sprite(0, 0, 'hitBox');
-    hitBox.width = this.game.width;
-    hitBox.height = this.game.height;
-    hitBox.fixedToCamera = true;
-    hitBox.lifespan = 70;
-    hitBox.alpha = 0.7;
-  }
-
-  var playerOneLoseHealth = function (player, redOrb, healthBar) {
-    healthBar.children.pop();
-  }
-
-  var playerTwoLoseHealth = function (player, redOrb) {
-    if (this.wysteria.health === 1) {
-      this.playerTwo.kill();
-    } else {
-      this.wysteria.health -= 1;
-      this.playerTwoHealthBar.children.pop();
-    }
-
-    showHitBox();
-  }
-
-  // Collision logic
-  this.game.physics.arcade.overlap(this.playerOne, this.redOrbs, playerOneLoseHealth(this.playerOne, this.redOrbs, this.playerOneHealthBar), this.asteria.canSurvive, this.game);
-  this.game.physics.arcade.overlap(this.playerOne, this.redOrbs, collidePlayerRedOrb, null, this.game);
-  this.game.physics.arcade.overlap(this.playerOne, this.blueOrbs, collidePlayerOneBlueOrb, null, this.game);
-
-  this.game.physics.arcade.overlap(this.playerTwo, this.redOrbs, playerTwoLoseHealth, null, this.game);
-  this.game.physics.arcade.overlap(this.playerTwo, this.redOrbs, collidePlayerRedOrb, null, this.game);
-  this.game.physics.arcade.overlap(this.playerTwo, this.blueOrbs, collidePlayerTwoBlueOrb, null, this.game);
+  // //  Collide the players and orbs with the platforms
+  // this.game.physics.arcade.collide(this.playerOne, this.platforms);
+  // this.game.physics.arcade.collide(this.redOrbs, this.platforms);
+  // this.game.physics.arcade.collide(this.blueOrbs, this.platforms);
+  // if (this.players === 2) {
+  //   this.game.physics.arcade.collide(this.playerTwo, this.platforms);
+  //   this.game.physics.arcade.collide(this.playerOne, this.playerTwo);
+  // }
+  //
+  // // Set starting X velocities
+  // this.asteria.setVelocityX(0);
+  // if (this.players === 2) {
+  //   this.wysteria.setVelocityX(0);
+  // }
+  //
+  // // Set object lifespans
+  // this.cloud.alpha = this.cloud.lifespan / 10000;
+  //
+  // this.blueOrbs.forEachAlive(function (blueOrb) {
+  //   blueOrb.alpha = blueOrb.lifespan / 10000;
+  // });
+  //
+  // this.redOrbs.forEachAlive(function (redOrb) {
+  //   redOrb.alpha = redOrb.lifespan / 10000;
+  // });
+  //
+  // // Player / Orb collisions
+  // var collidePlayerOneBlueOrb = function (player, blueOrb) {
+  //   blueOrb.kill();
+  //   //  Add and update the score
+  //   this.playerOneScore += 10;
+  //   if (this.players === 1) {
+  //     this.playerOneScoreText.text = 'Score: ' + this.playerOneScore;
+  //   } else {
+  //     this.playerOneScoreText.text = 'Player 1: ' + this.playerOneScore;
+  //   }
+  // }
+  //
+  // var collidePlayerTwoBlueOrb = function (player, blueOrb) {
+  //   blueOrb.kill();
+  //   //  Add and update the score
+  //   this.playerTwoScore += 10;
+  //   this.playerTwoScoreText.text = 'Player 2: ' + this.playerTwoScore;
+  // }
+  //
+  // var collidePlayerRedOrb = function (player, redOrb) {
+  //   redOrb.kill();
+  // }
+  //
+  // // Health Conditions (Move to model)
+  // var showHitBox = function () {
+  //   var hitBox = this.game.add.sprite(0, 0, 'hitBox');
+  //   hitBox.width = this.game.width;
+  //   hitBox.height = this.game.height;
+  //   hitBox.fixedToCamera = true;
+  //   hitBox.lifespan = 70;
+  //   hitBox.alpha = 0.7;
+  // }
+  //
+  // var playerOneLoseHealth = function (player, redOrb, healthBar) {
+  //   healthBar.children.pop();
+  // }
+  //
+  // var playerTwoLoseHealth = function (player, redOrb) {
+  //   if (this.wysteria.health === 1) {
+  //     this.playerTwo.kill();
+  //   } else {
+  //     this.wysteria.health -= 1;
+  //     this.playerTwoHealthBar.children.pop();
+  //   }
+  //
+  //   showHitBox();
+  // }
+  //
+  // // Collision logic
+  // this.game.physics.arcade.overlap(this.playerOne, this.redOrbs, playerOneLoseHealth(this.playerOne, this.redOrbs, this.playerOneHealthBar), this.asteria.canSurvive, this.game);
+  // this.game.physics.arcade.overlap(this.playerOne, this.redOrbs, collidePlayerRedOrb, null, this.game);
+  // this.game.physics.arcade.overlap(this.playerOne, this.blueOrbs, collidePlayerOneBlueOrb, null, this.game);
+  //
+  // this.game.physics.arcade.overlap(this.playerTwo, this.redOrbs, playerTwoLoseHealth, null, this.game);
+  // this.game.physics.arcade.overlap(this.playerTwo, this.redOrbs, collidePlayerRedOrb, null, this.game);
+  // this.game.physics.arcade.overlap(this.playerTwo, this.blueOrbs, collidePlayerTwoBlueOrb, null, this.game);
 
 
   // Set win conditions (come back and fix this)
