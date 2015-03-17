@@ -217,4 +217,25 @@ game.update = function () {
       game.player2.jump();
     }
   }
+
+  // Gave Over
+  var fallenOffScreen = game.player1.sprite.position.y > phaserGame.height;
+  if (fallenOffScreen || game.player1.health < 1) game.gameOver();
+  if (game.numOfPlayers === 2) {
+    var fallenOffScreen = game.player2.sprite.position.y > phaserGame.height;
+    if (fallenOffScreen || game.player2.health < 1) game.gameOver();
+  }
+};
+
+game.gameOver = function () {
+  phaserGame.paused = true;
+  game.showGameOverScreen();
+};
+
+game.showGameOverScreen = function () {
+  var gameOverScreen = phaserGame.add.sprite(0, 0, 'gameover');
+  gameOverScreen.width = phaserGame.width;
+  gameOverScreen.height = phaserGame.height;
+  gameOverScreen.fixedToCamera = true;
+  gameOverScreen.alpha = 0.5;
 };
