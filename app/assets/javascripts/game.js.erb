@@ -104,14 +104,17 @@ game.create = function () {
   phaserGame.time.events.loop(Phaser.Timer.SECOND * 5, game.createOrbs, phaserGame, game.redOrbs, 'redOrb');
 
   // Create Scores
+  var scoreFontSize = '32px';
+  var scoreTextColor = '#FFF';
+
   if (game.numOfPlayers === 1) {
-    game.p1Score = phaserGame.add.text(650, 16, 'Score: ' + game.player1.score, { fontSize: '32px', fill: '#FFF' });
+    game.p1Score = phaserGame.add.text(650, 16, 'Score: ' + game.player1.score, { fontSize: scoreFontSize, fill: scoreTextColor });
     game.p1Score.fixedToCamera = true;
   } else {
-    game.p1Score = phaserGame.add.text(600, 16, 'Player 1: ' + game.player1.score, { fontSize: '32px', fill: '#FFF' });
+    game.p1Score = phaserGame.add.text(600, 16, 'Player 1: ' + game.player1.score, { fontSize: scoreFontSize, fill: scoreTextColor });
     game.p1Score.fixedToCamera = true;
     // Player 2
-    game.p2Score = phaserGame.add.text(600, 56, 'Player 2: ' + game.player2.score, { fontSize: '32px', fill: '#FFF' });
+    game.p2Score = phaserGame.add.text(600, 56, 'Player 2: ' + game.player2.score, { fontSize: scoreFontSize, fill: scoreTextColor });
     game.p2Score.fixedToCamera = true;
   }
 };
