@@ -35,13 +35,6 @@ $( document ).ready(function() {
 
 var startGame = function (numOfPlayers) {
 
-  // var gameController;
-  // if (numOfPlayers === 1) {
-  //   gameController = new GameController(1);
-  // } else {
-  //   gameController = new TwoPlayerGameController();
-  // }
-
   $('#gameDiv').html('');
   $('#start-game-link').hide();
   $('#start-two-player-link').hide();
@@ -51,7 +44,6 @@ var startGame = function (numOfPlayers) {
   $('#game-fullscreen').removeClass('hide');
   $('#game-fullscreen').addClass('show');
 
-  // gameController.run();
   game.run(numOfPlayers);
 
   $.get('/game_reports', function(serverResponse, status, jqXHR) {
