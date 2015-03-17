@@ -227,10 +227,11 @@ game.update = function () {
   }
 };
 
-game.gameOver = function (playerNum) {
+game.gameOver = function (winnerNum) {
   phaserGame.paused = true;
   game.showGameOverScreen();
-  game.showGameStats(playerNum);
+  game.showGameStats(winnerNum);
+  game.resetNav();
 };
 
 game.showGameOverScreen = function () {
@@ -241,12 +242,18 @@ game.showGameOverScreen = function () {
   gameOverScreen.alpha = 0.5;
 };
 
-game.showGameStats = function (playerNum) {
-  var stats = phaserGame.add.text(phaserGame.width / 2 - 100, phaserGame.height / 2 - 250, '', { fontSize: '32px', fill: '#F00' });
+game.showGameStats = function (winnerNum) {
+  var stats = phaserGame.add.text(phaserGame.width / 2 - 90, phaserGame.height / 2 - 250, '', { fontSize: '32px', fill: '#F00' });
   stats.fixedToCamera = true;
   if (game.numOfPlayers === 1) {
     stats.text = 'Your score: ' + game.player1.score
   } else {
-    stats.text = 'Player ' + playerNum + ' wins!' + '\nPlayer 1 score: ' + game.player1.score + '\nPlayer 2 score: ' + game.player2.score
+    stats.text = 'Player ' + winnerNum + ' wins!' + '\nPlayer 1 score: ' + game.player1.score + '\nPlayer 2 score: ' + game.player2.score
   }
+};
+
+game.resetNav = function () {
+  $('#game-fullscreen').removeClass('show');
+  $('#start-game-link').show();
+  $('#start-two-player-link').show();
 };
