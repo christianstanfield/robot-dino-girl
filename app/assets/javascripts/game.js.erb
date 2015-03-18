@@ -20,8 +20,8 @@ game.preload = function () {
   phaserGame.load.image('redOrb', '<%= asset_path "unsafe_orb.png" %>');
   phaserGame.load.image('heart', '<%= asset_path "heart-sprite.png" %>');
   phaserGame.load.image('hitBox', '<%= asset_path "red.jpg" %>');
-  phaserGame.load.spritesheet('player1', '<%= asset_path "dude.png" %>', 32, 48);
-  phaserGame.load.spritesheet('player2', '<%= asset_path "dude2.png" %>', 32, 48);
+  phaserGame.load.spritesheet('player1', '<%= asset_path "asteria1.png" %>', 50, 67);
+  phaserGame.load.spritesheet('player2', '<%= asset_path "asteria2.png" %>', 50, 70);
   phaserGame.load.image('gameover', '<%= asset_path "game_over.png" %>');
 };
 
@@ -52,7 +52,7 @@ game.create = function () {
   game.platforms = phaserGame.add.group();
   game.platforms.enableBody = true;
   // Ground
-  var ground = game.platforms.create(0, phaserGame.world.height + 60);
+  var ground = game.platforms.create(0, phaserGame.world.height + 80);
   ground.scale.setTo(100, 1);
   ground.body.immovable = true;
   // Cloud
@@ -220,16 +220,18 @@ game.update = function () {
 
   // Gave Over
   var fallenOffScreen = game.player1.sprite.position.y > phaserGame.height;
-  if (fallenOffScreen || game.player1.health < 1) game.gameOver();
+  if (fallenOffScreen || game.player1.health < 1) game.gameOver(2);
   if (game.numOfPlayers === 2) {
     fallenOffScreen = game.player2.sprite.position.y > phaserGame.height;
-    if (fallenOffScreen || game.player2.health < 1) game.gameOver();
+    if (fallenOffScreen || game.player2.health < 1) game.gameOver(1);
   }
 };
 
-game.gameOver = function () {
+game.gameOver = function (winnerNum) {
   phaserGame.paused = true;
   game.showGameOverScreen();
+  game.showGameStats(winnerNum);
+  game.resetNav();
 };
 
 game.showGameOverScreen = function () {
@@ -238,4 +240,20 @@ game.showGameOverScreen = function () {
   gameOverScreen.height = phaserGame.height;
   gameOverScreen.fixedToCamera = true;
   gameOverScreen.alpha = 0.5;
+};
+
+game.showGameStats = function (winnerNum) {
+  var stats = phaserGame.add.text(phaserGame.width / 2 - 90, phaserGame.height / 2 - 250, '', { fontSize: '32px', fill: '#F00' });
+  stats.fixedToCamera = true;
+  if (game.numOfPlayers === 1) {
+    stats.text = 'Your score: ' + game.player1.score
+  } else {
+    stats.text = 'Player ' + winnerNum + ' wins!' + '\nPlayer 1 score: ' + game.player1.score + '\nPlayer 2 score: ' + game.player2.score
+  }
+};
+
+game.resetNav = function () {
+  $('#game-fullscreen').removeClass('show');
+  $('#start-game-link').show();
+  $('#start-two-player-link').show();
 };
