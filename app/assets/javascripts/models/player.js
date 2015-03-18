@@ -12,8 +12,8 @@ Player.prototype.enterGame = function () {
 };
 
 Player.prototype.setSpriteMotion = function () {
-  this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
-  this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+  this.sprite.animations.add('left', [0, 1, 2], 10, true);
+  this.sprite.animations.add('right', [4, 5, 6], 10, true);
 };
 
 // Player movement
@@ -29,7 +29,7 @@ Player.prototype.moveRight = function () {
 
 Player.prototype.standStill = function (){
   this.sprite.animations.stop();
-  this.sprite.frame = 4;
+  this.sprite.frame = 3;
 };
 
 Player.prototype.jump = function () {

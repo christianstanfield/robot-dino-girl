@@ -20,8 +20,8 @@ game.preload = function () {
   phaserGame.load.image('redOrb', '<%= asset_path "unsafe_orb.png" %>');
   phaserGame.load.image('heart', '<%= asset_path "heart-sprite.png" %>');
   phaserGame.load.image('hitBox', '<%= asset_path "red.jpg" %>');
-  phaserGame.load.spritesheet('player1', '<%= asset_path "dude.png" %>', 32, 48);
-  phaserGame.load.spritesheet('player2', '<%= asset_path "dude2.png" %>', 32, 48);
+  phaserGame.load.spritesheet('player1', '<%= asset_path "asteria1.png" %>', 50, 67);
+  phaserGame.load.spritesheet('player2', '<%= asset_path "asteria2.png" %>', 50, 70);
   phaserGame.load.image('gameover', '<%= asset_path "game_over.png" %>');
 };
 
@@ -52,7 +52,7 @@ game.create = function () {
   game.platforms = phaserGame.add.group();
   game.platforms.enableBody = true;
   // Ground
-  var ground = game.platforms.create(0, phaserGame.world.height + 60);
+  var ground = game.platforms.create(0, phaserGame.world.height + 80);
   ground.scale.setTo(100, 1);
   ground.body.immovable = true;
   // Cloud
